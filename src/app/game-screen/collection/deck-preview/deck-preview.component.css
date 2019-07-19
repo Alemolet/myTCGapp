@@ -1,0 +1,30 @@
+.container-fluid::-webkit-scrollbar { 
+    display: none; 
+}
+
+.container-fluid{
+    border: 1px solid black;
+    height: 70%;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+ul{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+li{
+    margin-left: auto;
+    margin-right: auto;
+    width: 150px;
+}
+
+.btn-danger{
+    height: 20px;
+    width: 55px;
+    font-size: 10px;
+    text-align: center;
+    padding: 0px 0px;
+}

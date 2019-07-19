@@ -1,0 +1,32 @@
+<div [ngSwitch]="type"
+ class="card"
+ (click)="onCardClick()"
+ [ngStyle]="{border: isSelected ? '2px solid blue' :'0px'}">
+    
+    <!-- Styling a Sorcery card-->
+ 
+    <div *ngSwitchCase="0" class="card-body" style="background-color: lightgreen;">
+      <h5 class="card-title">{{ name }}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Sorcery</h6>
+      <img src="{{ imgPath }}">
+      <p class="card-text">Description: {{ description }}</p>
+    </div>
+
+    <!-- Styling a Troop card -->
+
+    <div *ngSwitchCase="1" class="card-body" style="background-color: burlywood;">
+        <h5 class="card-title">{{ name }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Troop</h6>
+        <img src="{{ imgPath }}">
+        <p class="card-text">Description: {{ description }}</p>
+      </div>
+      
+    <!-- Styling a Trap card -->
+
+    <div *ngSwitchCase="2" class="card-body" style="background-color: plum;">
+        <h5 class="card-title">{{ name }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Trap</h6>
+        <img src="{{ imgPath }}">
+        <p class="card-text">Description: {{ description }}</p>
+      </div>
+</div>

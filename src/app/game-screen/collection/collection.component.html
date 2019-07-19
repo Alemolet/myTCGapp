@@ -1,0 +1,24 @@
+<div class="container-fluid" style="overflow-y: scroll; height:92vh;">
+  <button class="btn btn-primary" routerLink="/home" style="margin-top: 10px">Back</button>
+  <hr>
+  <div #deck>
+  <div *ngIf="isDeckEmpty()">
+          <p >Currently your deck is empty! Fill it!</p>
+        </div>
+        <div *ngIf="!isDeckEmpty()">
+            <p>Currently your deck contains:</p>
+            <app-deck-preview></app-deck-preview>
+        </div>
+  </div>
+  <hr>
+  <div #collection>
+    <p>
+      Cards owned:
+    </p>
+    <ul>
+      <li *ngFor="let card of cardCollection">
+        <app-card [card] = "card"></app-card>
+      </li>
+    </ul>
+  </div>
+</div>

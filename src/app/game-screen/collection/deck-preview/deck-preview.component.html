@@ -1,0 +1,13 @@
+
+<div class="container-fluid" style="overflow-y: scroll; max-height: 200px !important;">
+  <ul style="list-style: none">
+    <li *ngFor="let card of updatedDeck; let i = index">
+      {{ card.name }}
+     <button class="btn btn-danger" (click)="onRemove(i, card)">Remove</button>
+    </li>
+  </ul>
+</div>
+<div class="row">
+<div class="col-md-10"></div>
+<div class="col-md-2">{{ checkTot() }}/40</div>
+</div>

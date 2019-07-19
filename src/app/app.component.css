@@ -1,0 +1,16 @@
+.side-menu{
+    width: 15vw;
+    height: 92vh;
+    background-color: rgba(235, 235, 235, 0.664);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid black;
+}
+
+.playground{
+    padding: 0;
+    width: 70vw;
+    height: 92vh;
+    border-top: 1px solid black;
+}
