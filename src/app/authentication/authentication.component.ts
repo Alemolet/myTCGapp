@@ -33,7 +33,7 @@ export class AuthenticationComponent implements OnInit {
 
     this.isLoading = true;
 
-     this.logInSub = this.authService.logIn(email, password).subscribe(users => {
+    this.logInSub = this.authService.logIn(email, password).subscribe(users => {
       for(let user of users){
         if(user.email == email && user.password == password){
           this.authService.loggedIn.emit(true);                               
@@ -48,8 +48,12 @@ export class AuthenticationComponent implements OnInit {
                                                                             
 
   onSignUp(form: NgForm){
-    this.dbService.postUser(new User(form.value.email, form.value.password))
-    .subscribe(res => console.log(res));
+    this.authService.signUp(form.value.email, form.value.password)
+    .subscribe(res => console.log(res),
+    err => {
+      console.log(err);
+      alert(err.message);
+    });
   }
 
   onLinkClick(form: NgForm){

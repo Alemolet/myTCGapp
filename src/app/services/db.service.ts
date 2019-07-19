@@ -9,6 +9,7 @@ export class DbService{
 
     cardRemoved = new EventEmitter<{flag: boolean, id: number}>();
     private url: string = 'https://mytcgapp.firebaseio.com/';
+    private API_KEY: string = 'AIzaSyBSu_yoiOQ2kkxh7gSCJG1O3uAOvr3jjcQ';
 
     constructor(private http: HttpClient){}
 
@@ -47,6 +48,15 @@ export class DbService{
         });
     }
 
+    postUser(user: {email: string, password: string}){
+        return this.http.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + this.API_KEY, {
+            email: user.email,
+            password: user.password,
+            returnSecureToken: true
+        });
+    }
+
+/*BACKUP
     postUser(user: User){
         return this.http.post(this.url + 'users.json', {
             id: user.id,
@@ -54,6 +64,7 @@ export class DbService{
             password: user.password
         });
     }
+*/
 
     getUser(user: {email: string, password: string}){
         let parameters = new HttpParams();

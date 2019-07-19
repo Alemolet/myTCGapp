@@ -10,6 +10,10 @@ export class AuthenticationService{
 
     constructor(private dbService: DbService){}
 
+    signUp(email: string, password: string){
+        return this.dbService.postUser({email, password});
+    }
+
     logIn(email: string, password: string){
 
        return this.dbService.getUser({email, password})
