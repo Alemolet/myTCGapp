@@ -1,56 +1,68 @@
 
-<h1>Welcome to MyTGCApp!</h1>
+<h1 *ngIf="!isLoading">Welcome to MyTGCApp!</h1>
 <div *ngIf="isLoading">
     <app-loading></app-loading>
+    <p style="text-align: center;">Logging in...</p>
 </div>
 
 <div *ngIf="!isLoading" class="row">
-    <div class="col-xs-12 col-md-6 offset-md-3" style="padding-top: 20vh">
-        <form #authForm="ngForm" validate>
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="email" 
-                id="email" 
-                class="form-control" 
-                ngModel
-                name="email" 
-                [value]="email"
-                required
-                email>
+    <div class="col-xs-4 col-md-4"></div>
+    <div class="col-xs-4 col-md-4" style="padding-top: 10vh">
+        <div id="formBg">
+            <div class="row">
+                <div class="col-xs-12 col-md-12" id="form" style="text-align: center;">
+                    <form #authForm="ngForm" validate>
+                        <div class="form-group">
+                            <label for="email">E-mail</label>
+                            <input type="email" 
+                            id="email" 
+                            class="form-control" 
+                            ngModel
+                            name="email" 
+                            [value]="email"
+                            required
+                            email>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" 
+                            id="password" 
+                            class="form-control" 
+                            ngModel 
+                            name="password"
+                            [value]="password" 
+                            required
+                            password
+                            minlength="8">
+                        </div>
+                        <div id="buttons">
+                            <button *ngIf="isRegistered" 
+                            class="btn btn-primary" 
+                            (click)="onLogIn(authForm)" 
+                            [disabled]="!authForm.valid"
+                            >Log in</button>
+                            <button *ngIf="!isRegistered" 
+                            class="btn btn-primary" 
+                            (click)="onSignUp(authForm)"
+                            [disabled]="!authForm.valid"
+                            >Sign up</button>
+                        </div>
+                        <div id="footer">
+                        <div *ngIf="isRegistered"> 
+                            <p style="font-size: 80%">New to MyTGCApp?</p>
+                            <a routerLink="" (click)="onLinkClick(authForm)" style="font-size: 80%">Click here to register</a>
+                        </div>
+                        <div *ngIf="!isRegistered"> 
+                            <p style="font-size: 80%">Got an account already?</p>
+                            <a routerLink="" (click)="onLinkClick(authForm)" style="font-size: 80%">Click here to log in</a>
+                        </div>
+                    </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" 
-                id="password" 
-                class="form-control" 
-                ngModel 
-                name="password"
-                [value]="password" 
-                required
-                password
-                minlength="8">
             </div>
-            <div>
-                <button *ngIf="isRegistered" 
-                class="btn btn-primary" 
-                (click)="onLogIn(authForm)" 
-                [disabled]="!authForm.valid"
-                >Log in</button>
-                <button *ngIf="!isRegistered" 
-                class="btn btn-primary" 
-                (click)="onSignUp(authForm)"
-                [disabled]="!authForm.valid"
-                >Sign up</button>
-            </div>
-            <div *ngIf="isRegistered"> 
-                <p style="font-size: 80%">New to MyTGCApp?</p>
-                <a routerLink="" (click)="onLinkClick(authForm)" style="font-size: 80%">Click here to register</a>
-            </div>
-            <div *ngIf="!isRegistered"> 
-                <p style="font-size: 80%">Got an account already?</p>
-                <a routerLink="" (click)="onLinkClick(authForm)" style="font-size: 80%">Click here to log in</a>
-            </div>
-        </form>
     </div>
+    <div class="col-xs-4 col-md-4"></div>   
 </div>
+
 

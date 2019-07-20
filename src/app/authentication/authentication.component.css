@@ -7,6 +7,35 @@ p{
     margin-top: 10px;
     margin-bottom: 0px;
 }
+
 .row{
     text-align: center;
 }
+
+#formBg{
+    background-color: rgb(211, 211, 211);
+    border-radius: 5%;
+    height: 450px;
+}
+
+#form{
+    padding-top: 20px;
+}
+
+#footer{
+    margin-top: 65px;
+}
+
+#buttons{
+    margin-top: 70px;
+}
+
+.form-group{
+    margin-top: 35px;
+}
+
+input{
+    width: 225px;
+    margin: auto;
+}
+
