@@ -1,3 +1,12 @@
+@media screen and (max-width:320px){
+
+#playground{
+    padding: 0px;
+    width: 70vw;
+    height: 92vh;
+    border-top: 1px solid black;
+    }
+
 .side-menu{
     width: 15vw;
     height: 92vh;
@@ -6,11 +15,17 @@
     align-items: center;
     justify-content: center;
     border-right: 1px solid black;
+    }
 }
 
-.playground{
-    padding: 0;
-    width: 70vw;
+@media screen and (min-width:1100px){
+.side-menu{
+    width: 15vw;
     height: 92vh;
-    border-top: 1px solid black;
+    background-color: rgba(235, 235, 235, 0.664);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid black;
+    }
 }

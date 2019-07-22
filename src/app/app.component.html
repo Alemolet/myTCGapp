@@ -1,9 +1,9 @@
 <app-navbar></app-navbar>
-<div class="row">
-  <div *ngIf="isLoggedIn; else notLogged" class="col-md-2 side-menu">
+<div class="row" style="margin-right: 0px;">
+  <div *ngIf="isLoggedIn; else notLogged" class="col-xs-2 col-md-2 side-menu">
     <app-menu (collectionClicked)="onCollectionClicked($event)"></app-menu>
   </div>  
-  <div class="col-md-10 playground">
+  <div class="col-xs-10 col-md-10" id="playground">
     <router-outlet></router-outlet>
   </div>
 </div>

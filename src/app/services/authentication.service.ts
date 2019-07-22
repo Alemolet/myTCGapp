@@ -14,7 +14,9 @@ export class AuthenticationService{
         return this.dbService.postUser({email, password});
     }
 
-    logIn(email: string, password: string){
+    //not the most efficient way for sure, should've used the endpoint provided by
+    //Firebase Auth REST API; just practicing with rxjs operators.
+    logIn(email: string, password: string){   
 
        return this.dbService.getUser({email, password})
         .pipe(map(res => {                          //converting the response Object into an array of users

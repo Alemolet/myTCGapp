@@ -4,8 +4,6 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { DbService } from '../services/db.service';
 import { NgForm } from '@angular/forms';
-import { User } from '../models/user.model';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-authentication',
@@ -43,7 +41,7 @@ export class AuthenticationComponent implements OnInit {
         this.authService.loaded.emit(true);
       });
 
-      form.reset();  //the form input boxes return empty
+      form.reset(); 
     }
                                                                             
 

@@ -6,13 +6,13 @@
 </div>
 
 <div *ngIf="!isLoading" class="row">
-    <div class="col-xs-4 col-md-4"></div>
-    <div class="col-xs-4 col-md-4" style="padding-top: 10vh">
+    <div class="col-xs-2 col-md-4"></div>
+    <div class="col-xs-8 col-md-4" style="padding-top: 6vh; padding-right: 0px;">
         <div id="formBg">
             <div class="row">
-                <div class="col-xs-12 col-md-12" id="form" style="text-align: center;">
+                <div class="col-xs-12 col-md-12" id="form">
                     <form #authForm="ngForm" validate>
-                        <div class="form-group">
+                        <div class="form-group" style="padding-right: 0px;">
                             <label for="email">E-mail</label>
                             <input type="email" 
                             id="email" 
@@ -62,7 +62,7 @@
             </div>
             </div>
     </div>
-    <div class="col-xs-4 col-md-4"></div>   
+    <div class="col-xs-2 col-md-4"></div>   
 </div>
 
 
