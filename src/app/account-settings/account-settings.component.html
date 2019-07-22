@@ -6,27 +6,38 @@
             </button>
           </div>
         <div class="modal-body">
-          <form validate>
+          <form #settingsForm="ngForm" validate>
             <div class="form-group">
-              <label for="email">E-mail: </label>
-              <p>{{ email }}</p>
-              <button class="btn btn-danger">Edit</button>
+              <label for="email">Current e-mail: {{ data[0] }} | </label>
+              <button class="btn btn-danger" (click)="onEmailEdit()">Edit</button>
+              <div *ngIf="editEmail">
+                <label for="email">New e-mail: </label>
+                <input type="email" name="email">
+              </div>
             </div>
             <div class="form-group">
-                <label for="email">Password: </label>
-                <p>{{ password }}</p>
-                <button class="btn btn-danger">Edit</button>
+                <label for="email">Current Password: {{ data[1] }} | </label>
+                <button class="btn btn-danger" (click)="onPasswEdit()">Edit</button>
+                <div *ngIf="editPassw">
+                  <label for="password">New password: </label>
+                  <input type="password" name="password">
+                </div>
             </div>
             <div class="form-group">
-                <label for="email">Nickname: </label>
-                <p>{{ nickname }}</p>
-                <button class="btn btn-danger">Edit</button>
+                <label for="email">Current Nickname: {{ data[2] }} | </label>
+                <button class="btn btn-danger" (click)="onNickEdit()">Edit</button>
+                <div *ngIf="editNick">
+                    <label for="text">New nickname: </label>
+                    <input type="text" name="nickname">
+                </div>
             </div>
           </form>
         </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary">Save changes</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onClose(settingsForm)">Close</button>
           </div>
         </div>
+
+        
 

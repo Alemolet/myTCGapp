@@ -7,6 +7,8 @@ export class AuthenticationService{
 
     loggedIn = new EventEmitter<boolean>();
     loaded = new EventEmitter<boolean>();
+    data = new EventEmitter<string[]>();
+
     cuEmail: string = '';                   //Current User Email
     cuPassword: string = '';                //Current User Password
 
@@ -19,8 +21,15 @@ export class AuthenticationService{
     //not the most efficient way for sure, should've used the endpoint provided by
     //Firebase Auth REST API; just practicing with rxjs operators.
     logIn(email: string, password: string){   
-      this.cuEmail = email;   //settings modal component
-      this.cuPassword = password; //settings modal component
+     this.cuEmail = email;   //settings modal component
+     this.cuPassword = password; //settings modal component
+
+      let data: string[] = [];
+      data.push(email);
+      data.push(password);
+      data.push(this.nickGenerator()); 
+
+      this.data.emit(data);
 
        return this.dbService.getUser({email, password})
         .pipe(map(res => {                          //converting the response Object into an array of users

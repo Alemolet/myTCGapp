@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 export class NavbarComponent implements OnInit {
 
   private isLoggedInSub = new Subscription();
+  private dataSub = new Subscription();
   private isLoggedIn: boolean = false;
   private accountData: string[] = [];
 
@@ -17,17 +18,16 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedInSub = this.authService.loggedIn.subscribe(res => this.isLoggedIn = res);
-
-    this.accountData[0] = this.authService.cuEmail;
-    this.accountData[1] = this.authService.cuPassword;
-    this.accountData[2] = this.authService.nickGenerator();
+    this.dataSub = this.authService.data.subscribe(res => this.accountData = res);
   }
 
   onLogOut(){
     this.authService.logOut();
+    console.log("data emitted and catched in navbar component were: " + this.accountData);
   }
 
   ngOnDestroy(){
     this.isLoggedInSub.unsubscribe();
+    this.dataSub.unsubscribe();
   }
 }
