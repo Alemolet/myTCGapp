@@ -27,5 +27,7 @@
     role="dialog" 
     aria-labelledby="accoountSettingsLabel" 
     aria-hidden="true">
-    <app-account-settings></app-account-settings>
+    <div class="modal-dialog" role="document">
+        <app-account-settings [data]="accountData"></app-account-settings>
+    </div>
 </div>

@@ -17,12 +17,32 @@ import { AuthenticationService } from './services/authentication.service';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { AuthGuardService } from './guards/auth-guard.service';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const appRoutes: Routes = [
-   { path: 'authentication', component: AuthenticationComponent },
-   { path: 'home', component: GameScreenComponent, canActivate: [AuthGuardService] },
-   { path: '', redirectTo: 'authentication', pathMatch: 'full'},
-   { path: 'collection', component: CollectionComponent, canActivate: [AuthGuardService]}
+   { 
+      path: 'authentication', 
+      component: AuthenticationComponent 
+   },
+   { 
+      path: 'home', 
+      component: GameScreenComponent, 
+      canActivate: [AuthGuardService],
+      children: [
+      { 
+         path: 'collection', component: CollectionComponent, 
+         canActivate: [AuthGuardService] 
+      }]
+   },
+   { 
+      path: '', 
+      redirectTo: 'authentication', 
+      pathMatch: 'full' 
+   },
+   { 
+      path: '**', 
+      component: PageNotFoundComponent 
+   }
 ];
 
 @NgModule({
@@ -36,7 +56,8 @@ const appRoutes: Routes = [
       DeckPreviewComponent,
       AuthenticationComponent,
       AccountSettingsComponent,
-      LoadingComponent
+      LoadingComponent,
+      PageNotFoundComponent
    ],
    imports: [
       BrowserModule,

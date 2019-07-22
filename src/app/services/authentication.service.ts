@@ -7,6 +7,8 @@ export class AuthenticationService{
 
     loggedIn = new EventEmitter<boolean>();
     loaded = new EventEmitter<boolean>();
+    cuEmail: string = '';                   //Current User Email
+    cuPassword: string = '';                //Current User Password
 
     constructor(private dbService: DbService){}
 
@@ -17,6 +19,8 @@ export class AuthenticationService{
     //not the most efficient way for sure, should've used the endpoint provided by
     //Firebase Auth REST API; just practicing with rxjs operators.
     logIn(email: string, password: string){   
+      this.cuEmail = email;   //settings modal component
+      this.cuPassword = password; //settings modal component
 
        return this.dbService.getUser({email, password})
         .pipe(map(res => {                          //converting the response Object into an array of users
@@ -32,5 +36,16 @@ export class AuthenticationService{
 
     logOut(){
         this.loggedIn.next(false);
+    }
+
+    nickGenerator(){
+      let index: number = 0;
+  
+      for(let i=0; i<this.cuEmail.length; i++){
+        if(this.cuEmail[i] == '@'){
+          index = i;
+          return this.cuEmail.slice(0, index);     //truncating the email at the @ character
+        }
+      }
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-account-settings',
@@ -6,10 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./account-settings.component.css']
 })
 export class AccountSettingsComponent implements OnInit {
+  @Input() data: string[];
 
-  constructor() { }
+  private email: string = '';
+  private password: string = '';
+  private nickname: string = '';
+
+  constructor() {}
 
   ngOnInit() {
+   this.email = this.data[0];
+   this.password = this.data[1];
+   this.nickname = this.data[2];
   }
 
 }

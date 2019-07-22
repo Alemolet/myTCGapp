@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UtilitiesService } from '../services/utilities.service';
 
 @Component({
   selector: 'app-game-screen',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./game-screen.component.css']
 })
 export class GameScreenComponent implements OnInit {
+  displayHome = true;
 
-  constructor() { }
+  constructor(private utilsService: UtilitiesService) { }
 
   ngOnInit() {
+    this.utilsService.collectionClicked.subscribe(res => this.displayHome = !res)
   }
 
 }
