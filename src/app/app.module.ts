@@ -16,12 +16,13 @@ import { AuthenticationComponent } from './authentication/authentication.compone
 import { AuthenticationService } from './services/authentication.service';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { LoadingComponent } from './shared/loading/loading.component';
+import { AuthGuardService } from './guards/auth-guard.service';
 
 const appRoutes: Routes = [
    { path: 'authentication', component: AuthenticationComponent },
-   { path: 'home', component: GameScreenComponent },
+   { path: 'home', component: GameScreenComponent, canActivate: [AuthGuardService] },
    { path: '', redirectTo: 'authentication', pathMatch: 'full'},
-   { path: 'collection', component: CollectionComponent}
+   { path: 'collection', component: CollectionComponent, canActivate: [AuthGuardService]}
 ];
 
 @NgModule({
