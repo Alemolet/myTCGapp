@@ -1,17 +1,19 @@
 import { Card } from '../models/card.model';
 import { TemporaryDB } from '../models/temporary-db.model';
 import { Injectable, EventEmitter } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { User } from '../models/user.model';
+import { HttpClient } from '@angular/common/http';
+import { AngularFireAuth } from 'angularfire2/auth'
 
 @Injectable()
 export class DbService{
-
+    
     cardRemoved = new EventEmitter<{flag: boolean, id: number}>();
+
     private url: string = 'https://mytcgapp.firebaseio.com/';
     private API_KEY: string = 'AIzaSyBSu_yoiOQ2kkxh7gSCJG1O3uAOvr3jjcQ';
 
-    constructor(private http: HttpClient){}
+    constructor(private http: HttpClient, private af: AngularFireAuth){
+    }
 
     addCard(card: Card){
         TemporaryDB.deck.push(card);
@@ -48,32 +50,76 @@ export class DbService{
         });
     }
 
-    postUser(user: {email: string, password: string}){
+    postUser(user: {email: string, password: string/*, nickname: string*/}){    //check the possibility to add arguments and params in the request body
         return this.http.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + this.API_KEY, {
             email: user.email,
             password: user.password,
+           // nickname: this.authService.nickGenerator(user.email),
             returnSecureToken: true
         });
     }
 
-/*BACKUP
-    postUser(user: User){
-        return this.http.post(this.url + 'users.json', {
-            id: user.id,
-            email: user.email,
-            password: user.password
-        });
-    }
-*/
-
     getUser(user: {email: string, password: string}){
-        let parameters = new HttpParams();
 
-        parameters.append('email', user.email);
-        parameters.append('password', user.password);
-
-        return this.http.get(this.url + 'users.json', {
-            params: parameters
+        return this.http
+        .post("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + this.API_KEY, {
+            email: user.email,
+            password: user.password,
+            returnSecureToken: true
         })
+    }
+
+    updateUser(user: { 
+                email: string,
+                password: string, 
+                updatedEmail: string, 
+                updatedPassword: string, 
+                updatedNickname: string}){
+
+        /*1: find the user to update in the Db;*/
+
+        this.http
+        .post("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + this.API_KEY, {
+            email: user.email,
+            password: user.password,
+            returnSecureToken: true
+        })
+        /*Check if updatedEmail/Password/Nickname are not empty => send an http POST
+         request*/ 
+        .subscribe(res => {
+            if(user.updatedEmail){
+                this.http.post("https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + this.API_KEY, {
+                    idToken: res.idToken,     //ignore this error, this property is perfectly known by this kind of object
+                    email: user.updatedEmail,
+                    returnSecureToken: false
+                }).subscribe(res => {
+                    alert("Your e-mail address has been succesfully changed. Log in again to see the changes!");
+                    this.af.auth.signOut();
+                });
+            }
+
+            if(user.updatedPassword){
+                this.http.post("https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + this.API_KEY, {
+                    idToken: res.idToken,     //ignore this error, this property is perfectly known by this kind of object
+                    password: user.updatedPassword,
+                    returnSecureToken: false     
+                }).subscribe(res => {
+                    alert("Your password has been succesfully changed. You need to log in again to confirm the changes.");
+                    this.af.auth.signOut();
+                });
+            }
+
+            if(user.updatedNickname){
+                this.http.put("https://mytcgapp.firebaseio.com/users_details.json", {
+                    id: res.idToken,
+                    email: user.updatedEmail ? user.updatedEmail : user.email,
+                    nickname: user.updatedNickname
+                })
+            }
+        })
+    }
+
+    updateEmail(userID: string){
+       
     }
 }

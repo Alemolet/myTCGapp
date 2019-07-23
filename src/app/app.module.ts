@@ -18,6 +18,9 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { LoadingComponent } from './shared/loading/loading.component';
 import { AuthGuardService } from './guards/auth-guard.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
+
 
 const appRoutes: Routes = [
    { 
@@ -63,7 +66,8 @@ const appRoutes: Routes = [
       BrowserModule,
       RouterModule.forRoot(appRoutes),     //registering the routes (declared in appRoutes) intheRouterModule
       HttpClientModule,
-      FormsModule
+      FormsModule,
+      AngularFireModule.initializeApp(environment.firebase)
    ],
    providers: [
       DbService,

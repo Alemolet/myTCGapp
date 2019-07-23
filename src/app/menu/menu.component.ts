@@ -14,7 +14,7 @@ export class MenuComponent implements OnInit {
   nickname: string = '';
 
   constructor(private authService: AuthenticationService, private utilsService: UtilitiesService) { 
-    this.nickname = this.authService.nickGenerator();
+    this.nickname = this.authService.nickGenerator(this.authService.cuEmail);
   }
 
   ngOnInit() {

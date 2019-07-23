@@ -23,7 +23,6 @@ export class NavbarComponent implements OnInit {
 
   onLogOut(){
     this.authService.logOut();
-    console.log("data emitted and catched in navbar component were: " + this.accountData);
   }
 
   ngOnDestroy(){

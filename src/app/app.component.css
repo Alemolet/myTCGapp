@@ -18,7 +18,15 @@
     }
 }
 
-@media screen and (min-width:1100px){
+@media screen and (min-width:1000px){
+
+#playground{
+    padding: 0px;
+    width: 70vw;
+    height: 92vh;
+    border-top: 1px solid black;
+    }
+    
 .side-menu{
     width: 15vw;
     height: 92vh;

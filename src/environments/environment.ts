@@ -3,7 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: "AIzaSyBSu_yoiOQ2kkxh7gSCJG1O3uAOvr3jjcQ",
+    authDomain: "mytcgapp.firebaseapp.com",
+    databaseURL: "https://mytcgapp.firebaseio.com/",
+    projectId: "mytcgapp",
+    storageBucket: "mytcgapp.appspot.com",
+    messagingSenderId: "389458431381",
+    appId: "1:389458431381:web:9a1615145374726e"
+  }
 };
 
 /*

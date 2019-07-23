@@ -1,5 +1,6 @@
+<!--CHECK CLASS Z-DEPTH-5 FOR SHADOWING-->
 <div [ngSwitch]="type"
- class="card"
+ class="card z-depth-5"   
  (click)="onCardClick()"
  [ngStyle]="{border: isSelected ? '2px solid blue' :'0px'}">
     
