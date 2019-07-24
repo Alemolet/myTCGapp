@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
 import { UtilitiesService } from '../services/utilities.service';
+import { DbService } from '../services/db.service';
 
 @Component({
   selector: 'app-menu',
@@ -10,11 +11,11 @@ import { UtilitiesService } from '../services/utilities.service';
 export class MenuComponent implements OnInit {
   
   @Output() collectionClicked = new EventEmitter<boolean>();
-  isBtnCollectionClicked = false;
-  nickname: string = '';
+  private isBtnCollectionClicked = false;
+  private nickname: string = '';
 
-  constructor(private authService: AuthenticationService, private utilsService: UtilitiesService) { 
-    this.nickname = this.authService.nickGenerator(this.authService.cuEmail);
+  constructor(private authService: AuthenticationService, private dbService: DbService, private utilsService: UtilitiesService) { 
+  this.nickname = this.authService.cuNickname;
   }
 
   ngOnInit() {

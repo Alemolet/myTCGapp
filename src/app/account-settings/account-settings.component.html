@@ -12,7 +12,7 @@
               <button class="btn btn-danger" (click)="onEmailEdit()">Edit</button>
               <div *ngIf="editEmail">
                 <label for="email">New e-mail: </label>
-                <input type="email" ngModel name="email" [value]="email" style="margin-left: 10px;">
+                <input type="email" ngModel name="email" [value]="email" email required style="margin-left: 10px;">
               </div>
             </div>
             <div class="form-group">
@@ -20,7 +20,7 @@
                 <button class="btn btn-danger" (click)="onPasswEdit()">Edit</button>
                 <div *ngIf="editPassw">
                   <label for="password">New password: </label>
-                  <input type="password" ngModel name="password" [value]="password" minlength="8" style="margin-left: 10px;">
+                  <input type="password" ngModel name="password" [value]="password" password required minlength="8" style="margin-left: 10px;">
                 </div>
             </div>
             <div class="form-group">
@@ -28,14 +28,19 @@
                 <button class="btn btn-danger" (click)="onNickEdit()">Edit</button>
                 <div *ngIf="editNick">
                     <label for="text">New nickname: </label>
-                    <input type="text" ngModel name="nickname">
+                    <input type="text" ngModel name="nickname" required>
                 </div>
             </div>
           </form>
         </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="onSaveChanges(settingsForm)">Save changes</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onClose()">Close</button>
+            <button *ngIf="editEmail || editPassw || editNick" 
+                    type="button" 
+                    class="btn btn-primary" 
+                    [disabled] = "!settingsForm.valid"
+                    data-dismiss="modal"  
+                    (click)="onSaveChanges(settingsForm)">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onClose(settingsForm)">Close</button>
           </div>
         </div>
 

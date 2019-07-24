@@ -4,6 +4,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AngularFireAuth } from 'angularfire2/auth'
 import { Router } from '@angular/router';
+import { map } from 'rxjs/operators';
+
 
 @Injectable()
 export class DbService{
@@ -11,8 +13,9 @@ export class DbService{
     cardRemoved = new EventEmitter<{flag: boolean, id: number}>();
     loggedIn = new EventEmitter<boolean>();
 
-    private url: string = 'https://mytcgapp.firebaseio.com/';
+    private dbUrl: string = 'https://mytcgapp.firebaseio.com/';
     private API_KEY: string = 'AIzaSyBSu_yoiOQ2kkxh7gSCJG1O3uAOvr3jjcQ';
+    private userID: string = '';
 
     constructor(private http: HttpClient, private af: AngularFireAuth, private router: Router){
     }
@@ -43,7 +46,7 @@ export class DbService{
     }
 
     postCard(card: Card){
-        return this.http.post(this.url + 'collection.json', {
+        return this.http.post(this.dbUrl + 'collection.json', {
             id: card.id,
             name: card.name,
             description: card.description,
@@ -52,11 +55,16 @@ export class DbService{
         });
     }
 
-    postUser(user: {email: string, password: string/*, nickname: string*/}){    //check the possibility to add arguments and params in the request body
+    postUser(user: {email: string, password: string, nickname: string}){
+        this.http.post(this.dbUrl + 'accounts.json', {
+            email: user.email,
+            password: user.password,
+            nickname: user.nickname
+        }).subscribe();
+        
         return this.http.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + this.API_KEY, {
             email: user.email,
             password: user.password,
-           // nickname: this.authService.nickGenerator(user.email),
             returnSecureToken: true
         });
     }
@@ -69,6 +77,19 @@ export class DbService{
             password: user.password,
             returnSecureToken: true
         })
+    }
+
+    getNickname(email: string){
+
+        return this.http.get(this.dbUrl + 'accounts.json').pipe(map(res => { //converting the response Object into an array of users
+            let users = [];
+    
+            for(const key in res){
+              users.push({...res[key], id: key});     
+            }
+      
+            return users;         //do not forget to return the array to use it in the subscribe method next
+          }));
     }
 
     updateUser(user: { 
@@ -118,13 +139,18 @@ export class DbService{
             }
 
             if(user.updatedNickname){
-                this.http.put("https://mytcgapp.firebaseio.com/users_details.json", {
-                    //@ts-ignore
-                    id: res.idToken,
-                    email: user.updatedEmail ? user.updatedEmail : user.email,
+                this.http.post(this.dbUrl + 'accounts.json', {
+                    email: user.email,
+                    password: user.password,
                     nickname: user.updatedNickname
-                })
-            }
+                }).subscribe(res => {
+                    alert("Your nickname has been succesfully changed. You need to log in again to confirm the changes.");
+                    this.af.auth.signOut(); //is this actually doing something?
+                    this.loggedIn.emit(false);
+                    this.router.navigate(['/authentication']);
+                }, err => console.log(err))
+                
+                }
         })
     }
 

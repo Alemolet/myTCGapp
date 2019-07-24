@@ -46,10 +46,17 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
   }
 
   //check -- onClose() not finished
-  onClose(){
-    if(this.editEmail || this.editPassw || this.editNick){
+  onClose(form: NgForm){
+    if(form.value.email || form.value.passw || form.value.nick){
        alert("Are you sure you want to close? All the changes will be discarded.");
     }
+
+     //closing all the input blocks eventually opened
+    this.editEmail = false; 
+    this.editPassw = false;
+    this.editNick = false;
+
+    form.reset();
   }
 
   ngOnDestroy(){

@@ -8,31 +8,29 @@ export class AuthenticationService{
     loaded = new EventEmitter<boolean>();
     data = new EventEmitter<string[]>();
 
-    cuEmail: string = '';                   //Current User Email
-    cuPassword: string = '';                //Current User Password
+    cuEmail: string = '';                   //Current User's Email
+    cuPassword: string = '';                //Current User's Password
+    cuNickname: string = '';                //Current User's Nickname
 
     constructor(private dbService: DbService){}
 
     signUp(email: string, password: string){
-        return this.dbService.postUser({email, password});
+        const nickname: string = this.nickGenerator(email);
+
+        return this.dbService.postUser({email, password, nickname});
     }
 
-    //not the most efficient way for sure, should've used the endpoint provided by
-    //Firebase Auth REST API; just practicing with rxjs operators.
-    logIn(email: string, password: string){   
-     this.cuEmail = email;   //'settings' modal component
-     this.cuPassword = password; //'settings' modal component
-
-      let data: string[] = [];
-      data.push(email);
-      data.push(password);
-      data.push(this.nickGenerator(this.cuEmail)); 
-
-      this.data.emit(data);
+    logIn(email: string, password: string, nickname: string){   
+      this.cuEmail = email;   
+      this.cuPassword = password; 
+      this.cuNickname = nickname;
 
       return this.dbService.getUser({email, password});
 
       /*BACKUP
+      //not the most efficient way for sure, should've used the endpoint provided by
+      //Firebase Auth REST API; just practicing with rxjs operators.
+
        return this.dbService.getUser({email, password})
         .pipe(map(res => {                          //converting the response Object into an array of users
           const users = [];
@@ -55,8 +53,8 @@ export class AuthenticationService{
       for(let i=0; i<email.length; i++){
         if(email[i] == '@'){
           index = i;
-          return email.slice(0, index);     //truncating the email at the @ character; user can later edit it.
         }
       }
+      return email.slice(0, index);   //truncating the email at the @ character; user can later edit it.
     }
 }

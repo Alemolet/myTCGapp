@@ -16,11 +16,14 @@ export class AuthenticationComponent implements OnInit {
 
   private email: string;
   private password: string;
-  private ID: string;
+  private idToken: string;
+  private userID: string;
   private isLoading = false;
   private isLoadingSub = new Subscription();
   private logInSub = new Subscription();
+  private getNicknameSub = new Subscription();
   private isRegistered = true;
+  private data: string[] = [];
 
   constructor(private authService: AuthenticationService, private dbService: DbService, private utilsService: UtilitiesService, private router: Router, private afAuth: AngularFireAuth) { }
 
@@ -31,28 +34,49 @@ export class AuthenticationComponent implements OnInit {
   onLogIn(form: NgForm){
     let email = form.value.email;
     let password = form.value.password;
+    let nickname: string;
 
+    this.getNicknameSub = this.dbService.getNickname(email).subscribe(users => {
+      for(let user of users){
+        if(user.email === email){
+            this.userID = user.id;
+            nickname = user.nickname;
+            console.log("value found in db: " + user.nickname);
+        }
+      }
+  });
+  
     this.isLoading = true;
 
-    this.logInSub = this.authService.logIn(email, password).subscribe(res => {
+    setTimeout(() => {
+    
+      this.logInSub = this.authService.logIn(email, password, nickname).subscribe(res => {
+          
         //@ts-ignore
         this.ID = res.idToken;      //check if this operation is still needed/used
-        this.dbService.loggedIn.emit(true); 
-        this.utilsService.idEmitter.emit(this.ID);                            
+        
+        /*These data'll be catched by the AccountSettingsComponent*/
+        this.data.push(email);
+        this.data.push(password);
+        this.data.push(nickname); 
+
+        this.authService.data.emit(this.data);
+        this.dbService.loggedIn.emit(true);
+        this.utilsService.idEmitter.emit(this.idToken);                         
         this.router.navigate(['/home']);
-        this.authService.loaded.emit(true);
+        this.authService.loaded.emit(true); 
       }, err => {
         console.log(err.message);
         this.authService.loaded.emit(true);
       });
-
-      form.reset(); 
+  }, 4000);
+    
     }
                                                                             
 
   onSignUp(form: NgForm){
     this.authService.signUp(form.value.email, form.value.password)
-    .subscribe(res => console.log(res),
+    .subscribe(res => {},
     err => {
       console.log(err);
       alert(err.message);
@@ -67,5 +91,6 @@ export class AuthenticationComponent implements OnInit {
   ngOnDestroy(){
     this.isLoadingSub.unsubscribe();
     this.logInSub.unsubscribe();
+    this.getNicknameSub.unsubscribe();
   }
 }
