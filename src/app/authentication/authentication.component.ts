@@ -35,8 +35,8 @@ export class AuthenticationComponent implements OnInit {
     this.isLoading = true;
 
     this.logInSub = this.authService.logIn(email, password).subscribe(res => {
-      
-        this.ID = res.idToken;
+        //@ts-ignore
+        this.ID = res.idToken;      //check if this operation is still needed/used
         this.dbService.loggedIn.emit(true); 
         this.utilsService.idEmitter.emit(this.ID);                            
         this.router.navigate(['/home']);

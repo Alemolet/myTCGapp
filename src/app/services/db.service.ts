@@ -91,24 +91,27 @@ export class DbService{
         .subscribe(res => {
             if(user.updatedEmail){
                 this.http.post("https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + this.API_KEY, {
+                    //@ts-ignore
                     idToken: res.idToken,     //ignore this error, this property is perfectly known by this kind of object
                     email: user.updatedEmail,
                     returnSecureToken: false
                 }).subscribe(res => {
                     alert("Your e-mail address has been succesfully changed. Log in again to see the changes!");
-                    this.af.auth.signOut();
+                    this.af.auth.signOut(); //is this actually doing something?
+                    this.loggedIn.emit(false);
                     this.router.navigate(['/authentication']);
                 });
             }
 
             if(user.updatedPassword){
                 this.http.post("https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + this.API_KEY, {
+                    //@ts-ignore
                     idToken: res.idToken,     //ignore this error, this property is perfectly known by this kind of object
                     password: user.updatedPassword,
                     returnSecureToken: false     
                 }).subscribe(res => {
                     alert("Your password has been succesfully changed. You need to log in again to confirm the changes.");
-                    this.af.auth.signOut();
+                    this.af.auth.signOut(); //is this actually doing something?
                     this.loggedIn.emit(false);
                     this.router.navigate(['/authentication']);
                 });
@@ -116,6 +119,7 @@ export class DbService{
 
             if(user.updatedNickname){
                 this.http.put("https://mytcgapp.firebaseio.com/users_details.json", {
+                    //@ts-ignore
                     id: res.idToken,
                     email: user.updatedEmail ? user.updatedEmail : user.email,
                     nickname: user.updatedNickname
