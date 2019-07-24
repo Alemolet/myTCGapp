@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { DbService } from '../services/db.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,10 +15,10 @@ export class NavbarComponent implements OnInit {
   private isLoggedIn: boolean = false;
   private accountData: string[] = [];
 
-  constructor(private authService: AuthenticationService) { }
+  constructor(private authService: AuthenticationService, private dbService: DbService) { }
 
   ngOnInit() {
-    this.isLoggedInSub = this.authService.loggedIn.subscribe(res => this.isLoggedIn = res);
+    this.isLoggedInSub = this.dbService.loggedIn.subscribe(res => this.isLoggedIn = res);
     this.dataSub = this.authService.data.subscribe(res => this.accountData = res);
   }
 

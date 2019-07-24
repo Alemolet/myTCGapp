@@ -3,16 +3,18 @@ import { TemporaryDB } from '../models/temporary-db.model';
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AngularFireAuth } from 'angularfire2/auth'
+import { Router } from '@angular/router';
 
 @Injectable()
 export class DbService{
     
     cardRemoved = new EventEmitter<{flag: boolean, id: number}>();
+    loggedIn = new EventEmitter<boolean>();
 
     private url: string = 'https://mytcgapp.firebaseio.com/';
     private API_KEY: string = 'AIzaSyBSu_yoiOQ2kkxh7gSCJG1O3uAOvr3jjcQ';
 
-    constructor(private http: HttpClient, private af: AngularFireAuth){
+    constructor(private http: HttpClient, private af: AngularFireAuth, private router: Router){
     }
 
     addCard(card: Card){
@@ -95,6 +97,7 @@ export class DbService{
                 }).subscribe(res => {
                     alert("Your e-mail address has been succesfully changed. Log in again to see the changes!");
                     this.af.auth.signOut();
+                    this.router.navigate(['/authentication']);
                 });
             }
 
@@ -106,6 +109,8 @@ export class DbService{
                 }).subscribe(res => {
                     alert("Your password has been succesfully changed. You need to log in again to confirm the changes.");
                     this.af.auth.signOut();
+                    this.loggedIn.emit(false);
+                    this.router.navigate(['/authentication']);
                 });
             }
 

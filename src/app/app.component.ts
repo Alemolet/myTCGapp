@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TemporaryDB } from './models/temporary-db.model';
-import { AuthenticationService } from './services/authentication.service';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { DbService } from './services/db.service';
 
 @Component({
   selector: 'app-root',
@@ -15,11 +15,11 @@ export class AppComponent implements OnInit {
   isLoggedOutSub = new Subscription();
   isLoggedIn = false;
 
-  constructor(private authService: AuthenticationService){
+  constructor(private dbService: DbService){
   }
   ngOnInit(): void {
     TemporaryDB.generateCollection();
-    this.isLoggedInSub = this.authService.loggedIn.subscribe(res =>{
+    this.isLoggedInSub = this.dbService.loggedIn.subscribe(res =>{
       this.isLoggedIn = res;
     } );
   }

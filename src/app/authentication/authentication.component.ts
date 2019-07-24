@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { DbService } from '../services/db.service';
 import { NgForm } from '@angular/forms';
 import { UtilitiesService } from '../services/utilities.service';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   selector: 'app-authentication',
@@ -21,7 +22,7 @@ export class AuthenticationComponent implements OnInit {
   private logInSub = new Subscription();
   private isRegistered = true;
 
-  constructor(private authService: AuthenticationService, private dbService: DbService, private utilsService: UtilitiesService, private router: Router) { }
+  constructor(private authService: AuthenticationService, private dbService: DbService, private utilsService: UtilitiesService, private router: Router, private afAuth: AngularFireAuth) { }
 
   ngOnInit() {
    this.isLoadingSub = this.authService.loaded.subscribe(res => this.isLoading = !res);
@@ -36,7 +37,7 @@ export class AuthenticationComponent implements OnInit {
     this.logInSub = this.authService.logIn(email, password).subscribe(res => {
       
         this.ID = res.idToken;
-        this.authService.loggedIn.emit(true); 
+        this.dbService.loggedIn.emit(true); 
         this.utilsService.idEmitter.emit(this.ID);                            
         this.router.navigate(['/home']);
         this.authService.loaded.emit(true);

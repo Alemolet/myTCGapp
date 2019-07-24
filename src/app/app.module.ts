@@ -20,6 +20,7 @@ import { AuthGuardService } from './guards/auth-guard.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 
 const appRoutes: Routes = [
@@ -64,14 +65,15 @@ const appRoutes: Routes = [
    ],
    imports: [
       BrowserModule,
-      RouterModule.forRoot(appRoutes),     //registering the routes (declared in appRoutes) intheRouterModule
+      RouterModule.forRoot(appRoutes),     //registering the routes (declared in appRoutes) in RouterModule
       HttpClientModule,
       FormsModule,
       AngularFireModule.initializeApp(environment.firebase)
    ],
    providers: [
       DbService,
-      AuthenticationService
+      AuthenticationService,
+      AngularFireAuth
    ],
    bootstrap: [
       AppComponent

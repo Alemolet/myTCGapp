@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 @Injectable()
 export class AuthenticationService{
 
-    loggedIn = new EventEmitter<boolean>();
     loaded = new EventEmitter<boolean>();
     data = new EventEmitter<string[]>();
 
@@ -47,7 +46,7 @@ export class AuthenticationService{
     }
 
     logOut(){
-        this.loggedIn.next(false);
+        this.dbService.loggedIn.next(false);
     }
 
     nickGenerator(email: string){
