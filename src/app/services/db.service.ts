@@ -4,7 +4,6 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AngularFireAuth } from 'angularfire2/auth'
 import { Router } from '@angular/router';
-import { map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -79,6 +78,20 @@ export class DbService{
         })
     }
 
+    generateUserID(email: string){
+        return this.http.get(this.dbUrl + 'accounts.json').subscribe(res => {
+            for(const key in res){
+                res[key].email === email ? this.userID = key : null;
+            }
+        })
+    }
+
+    async getNickname(email: string){
+        const result = await this.http.get(this.dbUrl + 'accounts.json').toPromise();
+        return result;
+    }
+
+/* BACKUP
     getNickname(email: string){
 
         return this.http.get(this.dbUrl + 'accounts.json').pipe(map(res => { //converting the response Object into an array of users
@@ -91,7 +104,7 @@ export class DbService{
             return users;         //do not forget to return the array to use it in the subscribe method next
           }));
     }
-
+*/
     updateUser(user: { 
                 email: string,
                 password: string, 
@@ -113,7 +126,7 @@ export class DbService{
             if(user.updatedEmail){
                 this.http.post("https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + this.API_KEY, {
                     //@ts-ignore
-                    idToken: res.idToken,     //ignore this error, this property is perfectly known by this kind of object
+                    idToken: res.idToken,  
                     email: user.updatedEmail,
                     returnSecureToken: false
                 }).subscribe(res => {
@@ -127,7 +140,7 @@ export class DbService{
             if(user.updatedPassword){
                 this.http.post("https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + this.API_KEY, {
                     //@ts-ignore
-                    idToken: res.idToken,     //ignore this error, this property is perfectly known by this kind of object
+                    idToken: res.idToken,   
                     password: user.updatedPassword,
                     returnSecureToken: false     
                 }).subscribe(res => {
@@ -139,7 +152,7 @@ export class DbService{
             }
 
             if(user.updatedNickname){
-                this.http.post(this.dbUrl + 'accounts.json', {
+                this.http.put(this.dbUrl + 'accounts/' + this.userID + '.json', {
                     email: user.email,
                     password: user.password,
                     nickname: user.updatedNickname

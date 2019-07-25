@@ -11,15 +11,25 @@ import { DbService } from '../services/db.service';
 export class NavbarComponent implements OnInit {
 
   private isLoggedInSub = new Subscription();
-  private dataSub = new Subscription();
+  private userData: string[] = [];
   private isLoggedIn: boolean = false;
-  private accountData: string[] = [];
 
   constructor(private authService: AuthenticationService, private dbService: DbService) { }
 
   ngOnInit() {
-    this.isLoggedInSub = this.dbService.loggedIn.subscribe(res => this.isLoggedIn = res);
-    this.dataSub = this.authService.data.subscribe(res => this.accountData = res);
+    this.isLoggedInSub = this.dbService.loggedIn.subscribe(res => {
+      this.isLoggedIn = res;
+      this.dbService.getNickname(this.authService.cuEmail).then(result => {    
+        for(const key in result){
+           if(result[key].email === this.authService.cuEmail){
+              this.userData.push(result[key].email);
+              this.userData.push(result[key].password);
+              this.userData.push(result[key].nickname);
+            }
+          }
+        }
+      );
+    });
   }
 
   onLogOut(){
@@ -28,6 +38,5 @@ export class NavbarComponent implements OnInit {
 
   ngOnDestroy(){
     this.isLoggedInSub.unsubscribe();
-    this.dataSub.unsubscribe();
   }
 }

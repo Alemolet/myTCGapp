@@ -20,10 +20,9 @@ export class AuthenticationService{
         return this.dbService.postUser({email, password, nickname});
     }
 
-    logIn(email: string, password: string, nickname: string){   
+    logIn(email: string, password: string){   
       this.cuEmail = email;   
       this.cuPassword = password; 
-      this.cuNickname = nickname;
 
       return this.dbService.getUser({email, password});
 

@@ -9,7 +9,10 @@
           <form #settingsForm="ngForm" validate>
             <div class="form-group">
               <label for="email">Current e-mail: {{ data[0] }} | </label>
-              <button class="btn btn-danger" (click)="onEmailEdit()">Edit</button>
+              <button class="btn btn-danger" 
+                      (click)="onEmailEdit()"
+                      [disabled]="editPassw || editNick ? true : false"
+                      >Edit</button>
               <div *ngIf="editEmail">
                 <label for="email">New e-mail: </label>
                 <input type="email" ngModel name="email" [value]="email" email required style="margin-left: 10px;">
@@ -17,7 +20,10 @@
             </div>
             <div class="form-group">
                 <label for="email">Current Password: {{ data[1] }} | </label>
-                <button class="btn btn-danger" (click)="onPasswEdit()">Edit</button>
+                <button class="btn btn-danger" 
+                        (click)="onPasswEdit()" 
+                        [disabled]="editEmail || editNick ? true : false"
+                        >Edit</button>
                 <div *ngIf="editPassw">
                   <label for="password">New password: </label>
                   <input type="password" ngModel name="password" [value]="password" password required minlength="8" style="margin-left: 10px;">
@@ -25,7 +31,10 @@
             </div>
             <div class="form-group">
                 <label for="email">Current Nickname: {{ data[2] }} | </label>
-                <button class="btn btn-danger" (click)="onNickEdit()">Edit</button>
+                <button class="btn btn-danger" 
+                        (click)="onNickEdit()"
+                        [disabled]="editEmail || editPassw ? true : false"
+                        >Edit</button>
                 <div *ngIf="editNick">
                     <label for="text">New nickname: </label>
                     <input type="text" ngModel name="nickname" required>
@@ -34,12 +43,7 @@
           </form>
         </div>
           <div class="modal-footer">
-            <button *ngIf="editEmail || editPassw || editNick" 
-                    type="button" 
-                    class="btn btn-primary" 
-                    [disabled] = "!settingsForm.valid"
-                    data-dismiss="modal"  
-                    (click)="onSaveChanges(settingsForm)">Save changes</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled] = "!settingsForm.valid" (click)="onSaveChanges(settingsForm)">Save changes</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onClose(settingsForm)">Close</button>
           </div>
         </div>

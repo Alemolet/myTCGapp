@@ -17,11 +17,9 @@ export class AuthenticationComponent implements OnInit {
   private email: string;
   private password: string;
   private idToken: string;
-  private userID: string;
   private isLoading = false;
   private isLoadingSub = new Subscription();
   private logInSub = new Subscription();
-  private getNicknameSub = new Subscription();
   private isRegistered = true;
   private data: string[] = [];
 
@@ -32,45 +30,25 @@ export class AuthenticationComponent implements OnInit {
   }
 
   onLogIn(form: NgForm){
-    let email = form.value.email;
-    let password = form.value.password;
-    let nickname: string;
-
-    this.getNicknameSub = this.dbService.getNickname(email).subscribe(users => {
-      for(let user of users){
-        if(user.email === email){
-            this.userID = user.id;
-            nickname = user.nickname;
-            console.log("value found in db: " + user.nickname);
-        }
-      }
-  });
-  
+    this.email = form.value.email;
+    this.password = form.value.password;
     this.isLoading = true;
 
-    setTimeout(() => {
-    
-      this.logInSub = this.authService.logIn(email, password, nickname).subscribe(res => {
-          
-        //@ts-ignore
-        this.ID = res.idToken;      //check if this operation is still needed/used
-        
-        /*These data'll be catched by the AccountSettingsComponent*/
-        this.data.push(email);
-        this.data.push(password);
-        this.data.push(nickname); 
+    this.dbService.generateUserID(this.email);
 
-        this.authService.data.emit(this.data);
+    setTimeout(() => {
+      
+        this.logInSub = this.authService.logIn(this.email, this.password).subscribe(res => {
+                  
         this.dbService.loggedIn.emit(true);
-        this.utilsService.idEmitter.emit(this.idToken);                         
+        //@ts-ignore                        
         this.router.navigate(['/home']);
         this.authService.loaded.emit(true); 
       }, err => {
         console.log(err.message);
         this.authService.loaded.emit(true);
       });
-  }, 4000);
-    
+  }, 3000);
     }
                                                                             
 
@@ -91,6 +69,5 @@ export class AuthenticationComponent implements OnInit {
   ngOnDestroy(){
     this.isLoadingSub.unsubscribe();
     this.logInSub.unsubscribe();
-    this.getNicknameSub.unsubscribe();
   }
 }

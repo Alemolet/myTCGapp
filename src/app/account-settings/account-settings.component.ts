@@ -2,7 +2,6 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DbService } from '../services/db.service';
 import { AuthenticationService } from '../services/authentication.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-account-settings',
@@ -10,15 +9,16 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./account-settings.component.css']
 })
 export class AccountSettingsComponent implements OnInit, OnDestroy {
-  @Input() data: string[];   //You can access this array directly from the DOM
 
-  idEmitterSub = new Subscription();
-  userID: string = '';
-  editEmail: boolean = false;
-  editPassw: boolean = false;
-  editNick: boolean = false;
+  @Input('userData') data: string[];
 
-  constructor(private dbService: DbService, private authService: AuthenticationService) {}
+  private editEmail: boolean = false;
+  private editPassw: boolean = false;
+  private editNick: boolean = false;
+
+  constructor(private dbService: DbService, private authService: AuthenticationService) {
+    
+  }
 
   ngOnInit() {
   }
@@ -41,7 +41,8 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
                                 updatedEmail: form.value.email, 
                                 updatedPassword: form.value.password, 
                                 updatedNickname: form.value.nickname});
-
+            
+    this.closeEdit();
     form.reset();
   }
 
@@ -51,16 +52,18 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
        alert("Are you sure you want to close? All the changes will be discarded.");
     }
 
-     //closing all the input blocks eventually opened
-    this.editEmail = false; 
-    this.editPassw = false;
-    this.editNick = false;
-
+    this.closeEdit();
     form.reset();
   }
 
+  closeEdit(){
+    //closing all the input blocks eventually opened
+    this.editEmail = false; 
+    this.editPassw = false;
+    this.editNick = false;
+  }
+
   ngOnDestroy(){
-    this.idEmitterSub.unsubscribe();
   }
 
 }
