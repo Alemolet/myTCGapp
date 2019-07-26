@@ -43,7 +43,7 @@ export class AuthenticationService{
     }
 
     logOut(){
-        this.dbService.loggedIn.next(false);
+      this.dbService.loggedIn.next(false);
     }
 
     nickGenerator(email: string){

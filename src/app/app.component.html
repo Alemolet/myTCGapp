@@ -1,3 +1,4 @@
+<div class="container-fluid">
 <app-navbar></app-navbar>
 <div class="row" style="margin-right: 0px;">
   <div *ngIf="isLoggedIn; else notLogged" class="col-xs-2 col-md-2 side-menu">
@@ -8,30 +9,13 @@
   </div>
 </div>
 
+
 <!-- DO NOT display side menu if user's not logged in -->
 <ng-template #notLogged>
     <div class="col-md-2 side-menu">
     </div>  
 </ng-template>
-
-
-
-
-<!--Backup-->
-
-<!--
-  <div class="col-2 side-menu">
-      <app-menu (collectionClicked)="onCollectionClicked($event)"></app-menu>
-  </div>  
-  <div *ngIf="!isBtnCollectionClicked" class="col-10 playground">
-    <app-game-screen></app-game-screen>
-  </div>
-  <div *ngIf="isBtnCollectionClicked" class="col-10 playground"> 
-    <app-collection></app-collection>
-  </div>
 </div>
-</div>
--->
 
   
 

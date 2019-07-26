@@ -35,22 +35,18 @@ export class AuthenticationComponent implements OnInit {
     this.isLoading = true;
 
     this.dbService.generateUserID(this.email);
-
-    setTimeout(() => {
-      
-        this.logInSub = this.authService.logIn(this.email, this.password).subscribe(res => {
-                  
-        this.dbService.loggedIn.emit(true);
-        //@ts-ignore                        
-        this.router.navigate(['/home']);
-        this.authService.loaded.emit(true); 
-      }, err => {
-        console.log(err.message);
-        this.authService.loaded.emit(true);
+    this.logInSub = this.authService.logIn(this.email, this.password)
+        .subscribe(res => {       
+          this.dbService.loggedIn.emit(true);                      
+          setTimeout(() => {
+            this.router.navigate(['/home']);
+            this.authService.loaded.emit(true);
+          }, 5000); 
+        }, err => {
+          console.log(err.message);
+          this.authService.loaded.emit(true);
       });
-  }, 3000);
-    }
-                                                                            
+    }                                                                      
 
   onSignUp(form: NgForm){
     this.authService.signUp(form.value.email, form.value.password)

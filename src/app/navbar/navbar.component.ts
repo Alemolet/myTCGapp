@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { DbService } from '../services/db.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +15,7 @@ export class NavbarComponent implements OnInit {
   private userData: string[] = [];
   private isLoggedIn: boolean = false;
 
-  constructor(private authService: AuthenticationService, private dbService: DbService) { }
+  constructor(private authService: AuthenticationService, private dbService: DbService, private router: Router) { }
 
   ngOnInit() {
     this.isLoggedInSub = this.dbService.loggedIn.subscribe(res => {
@@ -33,7 +34,12 @@ export class NavbarComponent implements OnInit {
   }
 
   onLogOut(){
+    this.authService.loaded.emit(false);
     this.authService.logOut();
+    setTimeout(() => {
+      this.authService.loaded.emit(true);
+      this.router.navigate(['/authentication']);
+    }, 4000);
   }
 
   ngOnDestroy(){

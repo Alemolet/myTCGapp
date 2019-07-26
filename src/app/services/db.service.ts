@@ -78,8 +78,12 @@ export class DbService{
         })
     }
 
+    getAllUsers(){
+        return this.http.get(this.dbUrl + 'accounts.json');
+    }
+
     generateUserID(email: string){
-        return this.http.get(this.dbUrl + 'accounts.json').subscribe(res => {
+        return this.getAllUsers().subscribe(res => {
             for(const key in res){
                 res[key].email === email ? this.userID = key : null;
             }
@@ -87,7 +91,8 @@ export class DbService{
     }
 
     async getNickname(email: string){
-        const result = await this.http.get(this.dbUrl + 'accounts.json').toPromise();
+        const result = await this.getAllUsers().toPromise();
+        
         return result;
     }
 
@@ -110,7 +115,8 @@ export class DbService{
                 password: string, 
                 updatedEmail: string, 
                 updatedPassword: string, 
-                updatedNickname: string}){
+                updatedNickname: string
+            }){
 
         /*1: find the user to update in the Db;*/
 
@@ -120,54 +126,61 @@ export class DbService{
             password: user.password,
             returnSecureToken: true
         })
-        /*Check if updatedEmail/Password/Nickname are not empty => send an http POST
+        /*Check if updatedEmail/Password/Nickname are not empty => send a proper http POST/PUT
          request*/ 
         .subscribe(res => {
             if(user.updatedEmail){
-                this.http.post("https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + this.API_KEY, {
-                    //@ts-ignore
-                    idToken: res.idToken,  
-                    email: user.updatedEmail,
-                    returnSecureToken: false
-                }).subscribe(res => {
-                    alert("Your e-mail address has been succesfully changed. Log in again to see the changes!");
-                    this.af.auth.signOut(); //is this actually doing something?
-                    this.loggedIn.emit(false);
-                    this.router.navigate(['/authentication']);
-                });
+                this.updateEmail(res, user.updatedEmail);
             }
 
             if(user.updatedPassword){
-                this.http.post("https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + this.API_KEY, {
-                    //@ts-ignore
-                    idToken: res.idToken,   
-                    password: user.updatedPassword,
-                    returnSecureToken: false     
-                }).subscribe(res => {
-                    alert("Your password has been succesfully changed. You need to log in again to confirm the changes.");
-                    this.af.auth.signOut(); //is this actually doing something?
-                    this.loggedIn.emit(false);
-                    this.router.navigate(['/authentication']);
-                });
+                this.updatePassword(res, user.updatedPassword);
             }
 
             if(user.updatedNickname){
-                this.http.put(this.dbUrl + 'accounts/' + this.userID + '.json', {
-                    email: user.email,
-                    password: user.password,
-                    nickname: user.updatedNickname
-                }).subscribe(res => {
-                    alert("Your nickname has been succesfully changed. You need to log in again to confirm the changes.");
-                    this.af.auth.signOut(); //is this actually doing something?
-                    this.loggedIn.emit(false);
-                    this.router.navigate(['/authentication']);
-                }, err => console.log(err))
-                
-                }
+                this.updateNickname(user.email, user.password, user.updatedNickname);
+            }
         })
     }
 
-    updateEmail(userID: string){
-       
+    updateEmail(res: Object, newEmail: string){
+        this.http.post("https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + this.API_KEY, {
+            //@ts-ignore
+            idToken: res.idToken,  
+            email: newEmail,
+            returnSecureToken: false
+        }).subscribe(res => {
+            alert("Your e-mail address has been succesfully changed. Log in again to see the changes!");
+            this.af.auth.signOut(); //is this actually doing something?
+            this.loggedIn.emit(false);
+            this.router.navigate(['/authentication']);
+        });
+    }
+
+    updatePassword(res: Object, newPassword: string){
+        this.http.post("https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + this.API_KEY, {
+            //@ts-ignore
+            idToken: res.idToken,   
+            password: newPassword,
+            returnSecureToken: false     
+        }).subscribe(res => {
+            alert("Your password has been succesfully changed. You need to log in again to confirm the changes.");
+            this.af.auth.signOut(); //is this actually doing something?
+            this.loggedIn.emit(false);
+            this.router.navigate(['/authentication']);
+        });
+    }
+
+    updateNickname(email: string, password: string, newNick: string){
+        this.http.put(this.dbUrl + 'accounts/' + this.userID + '.json', {
+            email: email,
+            password: password,
+            nickname: newNick
+        }).subscribe(res => {
+            alert("Your nickname has been succesfully changed. You need to log in again to confirm the changes.");
+            this.af.auth.signOut(); //is this actually doing something?
+            this.loggedIn.emit(false);
+            this.router.navigate(['/authentication']);
+        }, err => console.log(err)) 
     }
 }
