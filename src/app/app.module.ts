@@ -21,9 +21,15 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { ErrorComponent } from './shared/error-window/error/error.component';
 
 
 const appRoutes: Routes = [
+   {
+      path: '',
+      redirectTo: 'authentication',
+      pathMatch: 'full'
+   },
    { 
       path: 'authentication', 
       component: AuthenticationComponent 
@@ -36,12 +42,8 @@ const appRoutes: Routes = [
       { 
          path: 'collection', component: CollectionComponent, 
          canActivate: [AuthGuardService] 
-      }]
-   },
-   { 
-      path: '', 
-      redirectTo: 'authentication', 
-      pathMatch: 'full' 
+      }
+   ]
    },
    { 
       path: '**', 
@@ -61,7 +63,8 @@ const appRoutes: Routes = [
       AuthenticationComponent,
       AccountSettingsComponent,
       LoadingComponent,
-      PageNotFoundComponent
+      PageNotFoundComponent,
+      ErrorComponent
    ],
    imports: [
       BrowserModule,

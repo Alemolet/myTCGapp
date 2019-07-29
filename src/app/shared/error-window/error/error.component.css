@@ -1,0 +1,11 @@
+.alert {
+    position: absolute;
+    display: inline-block;
+    opacity: 0.9;
+    top: 30%;
+    margin-right: 30vw;
+    margin-left: 30vw;
+    border: 1px solid transparent;
+    border-radius: 4px;
+  }
+  

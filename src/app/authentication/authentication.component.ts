@@ -6,6 +6,7 @@ import { DbService } from '../services/db.service';
 import { NgForm } from '@angular/forms';
 import { UtilitiesService } from '../services/utilities.service';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { ErrorHandlerService } from '../services/error-handler.service';
 
 @Component({
   selector: 'app-authentication',
@@ -21,9 +22,12 @@ export class AuthenticationComponent implements OnInit {
   private isLoadingSub = new Subscription();
   private logInSub = new Subscription();
   private isRegistered = true;
+  private userFound = false;
   private data: string[] = [];
+  private timer: number = 0;
+  private error: string = '';
 
-  constructor(private authService: AuthenticationService, private dbService: DbService, private utilsService: UtilitiesService, private router: Router, private afAuth: AngularFireAuth) { }
+  constructor(private authService: AuthenticationService, private dbService: DbService, private utilsService: UtilitiesService, private router: Router, private afAuth: AngularFireAuth, private errorHandler: ErrorHandlerService) { }
 
   ngOnInit() {
    this.isLoadingSub = this.authService.loaded.subscribe(res => this.isLoading = !res);
@@ -34,18 +38,38 @@ export class AuthenticationComponent implements OnInit {
     this.password = form.value.password;
     this.isLoading = true;
 
+    /*Trying to navigate to '/home' every sec (max 5sec) until user succesfully logged in*/
+    let intervalId = setInterval(() => {
+      this.timer++;
+
+      if(this.userFound){
+        this.timer = 0; 
+        this.authService.loaded.emit(true);
+        this.userFound = false;
+        this.router.navigate(['/home']);
+        clearInterval(intervalId);
+      } 
+      if(this.timer>5){
+        this.timer = 0;
+        clearInterval(intervalId);
+      }
+    }, 1000);
+
+    /*Actual HTTP Log in request*/
     this.dbService.generateUserID(this.email);
     this.logInSub = this.authService.logIn(this.email, this.password)
-        .subscribe(res => {       
-          this.dbService.loggedIn.emit(true);                      
-          setTimeout(() => {
-            this.router.navigate(['/home']);
-            this.authService.loaded.emit(true);
-          }, 5000); 
+        .subscribe(res => {
+          this.dbService.loggedIn.emit(true);
+          setTimeout(()=>{
+            this.userFound = true;
+          }
+          ,5000)       
         }, err => {
-          console.log(err.message);
+          this.error = this.errorHandler.loginErrorHandler(err.error.error.message); //saving the error msg to display in the alert
           this.authService.loaded.emit(true);
       });
+
+      this.error = ''; //resetting the error text msg
     }                                                                      
 
   onSignUp(form: NgForm){

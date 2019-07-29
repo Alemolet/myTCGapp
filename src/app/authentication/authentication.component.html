@@ -1,8 +1,9 @@
-
-<h1 *ngIf="!isLoading">Welcome to MyTGCApp!</h1>
+<div class="container-fluid">
+<h1 *ngIf="!isLoading">Welcome to MyTCGApp!</h1>
 <div *ngIf="isLoading">
     <app-loading></app-loading>
-    <p style="text-align: center;">Logging in...</p>
+    <p *ngIf="timer < 2" style="text-align: center;">Logging in...</p>
+    <p *ngIf="timer >= 2"style="text-align: center;">Loading...</p>
 </div>
 
 <div *ngIf="!isLoading" class="row">
@@ -49,7 +50,7 @@
                         </div>
                         <div id="footer">
                         <div *ngIf="isRegistered"> 
-                            <p style="font-size: 80%">New to MyTGCApp?</p>
+                            <p style="font-size: 80%">New to MyTCGApp?</p>
                             <a routerLink="" (click)="onLinkClick(authForm)" style="font-size: 80%">Click here to register</a>
                         </div>
                         <div *ngIf="!isRegistered"> 
@@ -64,5 +65,9 @@
     </div>
     <div class="col-xs-2 col-md-4"></div>   
 </div>
+
+<div><app-error *ngIf="error" [error] = "error"></app-error></div>
+</div>
+
 
 
