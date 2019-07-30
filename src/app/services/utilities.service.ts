@@ -1,12 +1,13 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable} from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilitiesService {
 
-  collectionClicked = new EventEmitter<boolean>();
+  showLogo = new BehaviorSubject(true);
 
-constructor() { }
+  constructor() { }
 
 }

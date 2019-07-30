@@ -1,23 +1,43 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, AfterViewInit, OnChanges } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DbService } from '../services/db.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-account-settings',
   templateUrl: './account-settings.component.html',
   styleUrls: ['./account-settings.component.css']
 })
-export class AccountSettingsComponent implements OnInit, OnDestroy {
+export class AccountSettingsComponent implements OnInit, OnDestroy, OnChanges {
 
-  @Input('userData') data: string[];
+  @Input('userData') userInfo: {
+    _email: string,
+    _password: string,
+    _nickname: string
+  };
 
   private editEmail: boolean = false;
   private editPassw: boolean = false;
   private editNick: boolean = false;
+  private email: string = '';
+  private password: string = '';
+  private nickname: string = '';
 
   constructor(private dbService: DbService, private authService: AuthenticationService) {
     
+  }
+
+  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
+    if(this.userInfo){
+      this.email = this.userInfo._email;
+      this.password = this.userInfo._password;
+      this.nickname = this.userInfo._nickname;
+
+      this.dbService.nicknameChange$.subscribe(newNick => {
+        this.nickname = newNick.toString();
+      });
+    }
   }
 
   ngOnInit() {

@@ -4,13 +4,16 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AngularFireAuth } from 'angularfire2/auth'
 import { Router } from '@angular/router';
+import { map } from 'rxjs/operators'
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 
 
 @Injectable()
 export class DbService{
     
     cardRemoved = new EventEmitter<{flag: boolean, id: number}>();
-    loggedIn = new EventEmitter<boolean>();
+    loggedIn = new BehaviorSubject<boolean>(false);
+    nicknameChange$ = new Subject();
 
     private dbUrl: string = 'https://mytcgapp.firebaseio.com/';
     private API_KEY: string = 'AIzaSyBSu_yoiOQ2kkxh7gSCJG1O3uAOvr3jjcQ';
@@ -90,26 +93,22 @@ export class DbService{
         })
     }
 
-    async getNickname(email: string){
-        const result = await this.getAllUsers().toPromise();
+    getNickname(email: string): Observable<string>{
+        const result = this.getAllUsers();
         
-        return result;
-    }
-
-/* BACKUP
-    getNickname(email: string){
-
-        return this.http.get(this.dbUrl + 'accounts.json').pipe(map(res => { //converting the response Object into an array of users
+        return result.pipe(map(res => {
             let users = [];
-    
-            for(const key in res){
-              users.push({...res[key], id: key});     
+
+            for(let key in res){
+                users.push({...res[key]});
             }
-      
-            return users;         //do not forget to return the array to use it in the subscribe method next
-          }));
+            
+            users.filter(user => user.email === email);
+
+            return users[0].nickname;
+        }));
     }
-*/
+
     updateUser(user: { 
                 email: string,
                 password: string, 
@@ -152,7 +151,7 @@ export class DbService{
         }).subscribe(res => {
             alert("Your e-mail address has been succesfully changed. Log in again to see the changes!");
             this.af.auth.signOut(); //is this actually doing something?
-            this.loggedIn.emit(false);
+            this.loggedIn.next(false);
             this.router.navigate(['/authentication']);
         });
     }
@@ -166,7 +165,7 @@ export class DbService{
         }).subscribe(res => {
             alert("Your password has been succesfully changed. You need to log in again to confirm the changes.");
             this.af.auth.signOut(); //is this actually doing something?
-            this.loggedIn.emit(false);
+            this.loggedIn.next(false);
             this.router.navigate(['/authentication']);
         });
     }
@@ -177,10 +176,7 @@ export class DbService{
             password: password,
             nickname: newNick
         }).subscribe(res => {
-            alert("Your nickname has been succesfully changed. You need to log in again to confirm the changes.");
-            this.af.auth.signOut(); //is this actually doing something?
-            this.loggedIn.emit(false);
-            this.router.navigate(['/authentication']);
+            this.nicknameChange$.next(newNick);
         }, err => console.log(err)) 
     }
 }

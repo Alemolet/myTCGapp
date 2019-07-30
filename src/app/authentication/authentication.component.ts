@@ -17,17 +17,18 @@ export class AuthenticationComponent implements OnInit {
 
   private email: string;
   private password: string;
-  private idToken: string;
   private isLoading = false;
   private isLoadingSub = new Subscription();
   private logInSub = new Subscription();
   private isRegistered = true;
   private userFound = false;
-  private data: string[] = [];
   private timer: number = 0;
   private error: string = '';
 
-  constructor(private authService: AuthenticationService, private dbService: DbService, private utilsService: UtilitiesService, private router: Router, private afAuth: AngularFireAuth, private errorHandler: ErrorHandlerService) { }
+  constructor( private authService: AuthenticationService, 
+               private dbService: DbService, private utilsService: UtilitiesService, 
+               private router: Router, private afAuth: AngularFireAuth, 
+               private errorHandler: ErrorHandlerService) { }
 
   ngOnInit() {
    this.isLoadingSub = this.authService.loaded.subscribe(res => this.isLoading = !res);
@@ -38,28 +39,13 @@ export class AuthenticationComponent implements OnInit {
     this.password = form.value.password;
     this.isLoading = true;
 
-    /*Trying to navigate to '/home' every sec (max 5sec) until user succesfully logged in*/
-    let intervalId = setInterval(() => {
-      this.timer++;
-
-      if(this.userFound){
-        this.timer = 0; 
-        this.authService.loaded.emit(true);
-        this.userFound = false;
-        this.router.navigate(['/home']);
-        clearInterval(intervalId);
-      } 
-      if(this.timer>5){
-        this.timer = 0;
-        clearInterval(intervalId);
-      }
-    }, 1000);
+    this.loadHomePage();
 
     /*Actual HTTP Log in request*/
     this.dbService.generateUserID(this.email);
     this.logInSub = this.authService.logIn(this.email, this.password)
         .subscribe(res => {
-          this.dbService.loggedIn.emit(true);
+          this.dbService.loggedIn.next(true);
           setTimeout(()=>{
             this.userFound = true;
           }
@@ -84,6 +70,26 @@ export class AuthenticationComponent implements OnInit {
   onLinkClick(form: NgForm){
     this.isRegistered = !this.isRegistered;
     form.reset();
+  }
+
+  loadHomePage(){
+    /*Trying to navigate to '/home' every sec (max 5sec) until user succesfully logged in*/
+    let intervalId = setInterval(() => {
+      this.timer++;
+
+      if(this.userFound){
+        this.timer = 0; 
+        this.authService.loaded.emit(true);
+        this.userFound = false;
+        this.router.navigate(['/home']);
+        clearInterval(intervalId);
+      } 
+      /*Handling the case in which no user has been found in db and setInterval needs to be stopped*/
+      if(this.timer>5){
+        this.timer = 0;
+        clearInterval(intervalId);
+      }
+    }, 1000);
   }
 
   ngOnDestroy(){

@@ -8,7 +8,7 @@
         <div class="modal-body">
           <form #settingsForm="ngForm" validate>
             <div class="form-group">
-              <label for="email">Current e-mail: {{ data[0] }} | </label>
+              <label for="email">Current e-mail: {{ email }} | </label>
               <button class="btn btn-danger" 
                       (click)="onEmailEdit()"
                       [disabled]="editPassw || editNick ? true : false"
@@ -19,7 +19,7 @@
               </div>
             </div>
             <div class="form-group">
-                <label for="email">Current Password: {{ data[1] }} | </label>
+                <label for="email">Current Password: {{ password }} | </label>
                 <button class="btn btn-danger" 
                         (click)="onPasswEdit()" 
                         [disabled]="editEmail || editNick ? true : false"
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="email">Current Nickname: {{ data[2] }} | </label>
+                <label for="email">Current Nickname: {{ nickname }} | </label>
                 <button class="btn btn-danger" 
                         (click)="onNickEdit()"
                         [disabled]="editEmail || editPassw ? true : false"

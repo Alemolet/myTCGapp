@@ -26,6 +26,6 @@ export class CollectionComponent implements OnInit {
   }
 
   onBack(){
-    this.utilsService.collectionClicked.emit(false);    //turns displayHome to true (in GameScreenComponent)
+    this.utilsService.showLogo.next(true);    //turns displayLogo to true (in GameScreenComponent)
   }
 }
