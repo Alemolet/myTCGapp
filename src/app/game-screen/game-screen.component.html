@@ -3,6 +3,8 @@
   <p style="text-align: center;">Logging out...</p>
 </div>
 
+<div><app-success *ngIf="msg" [msg] = "msg"></app-success></div>
+
 <div *ngIf="!isLoading">
   <h1 *ngIf="displayLogo">
   Some weird game logo

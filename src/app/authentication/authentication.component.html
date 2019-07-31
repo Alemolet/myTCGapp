@@ -9,14 +9,15 @@
 <div *ngIf="!isLoading" class="row">
     <div class="col-xs-2 col-md-4"></div>
     <div class="col-xs-8 col-md-4" style="padding-top: 6vh; padding-right: 0px;">
-        <div id="formBg">
+        <div id="formBg" class="shadow-lg bg-white rounded">
             <div class="row">
-                <div class="col-xs-12 col-md-12" id="form">
+                <div class="container-fluid" id="form">
                     <form #authForm="ngForm" validate>
                         <div class="form-group" style="padding-right: 0px;">
-                            <label for="email">E-mail</label>
+                            <label for="email">E-mail:</label>
                             <input type="email" 
-                            id="email" 
+                            id="email"
+                            placeholder="Email" 
                             class="form-control" 
                             ngModel
                             name="email" 
@@ -25,9 +26,10 @@
                             email>
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
+                            <label for="password">Password:</label>
                             <input type="password" 
-                            id="password" 
+                            id="password"
+                            placeholder="Password" 
                             class="form-control" 
                             ngModel 
                             name="password"
@@ -35,6 +37,9 @@
                             required
                             password
                             minlength="8">
+                            <small id="passwordHelpBlock" class="form-text text-muted" style="text-align: left; margin-left: 12%;">
+                                8 characters min.
+                            </small>
                         </div>
                         <div id="buttons">
                             <button *ngIf="isRegistered" 

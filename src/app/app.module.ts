@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -21,7 +22,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { ErrorComponent } from './shared/error-window/error/error.component';
+import { ErrorComponent } from './shared/alerts/error/error.component';
+import { SuccessComponent } from './shared/alerts/success/success.component';
 
 
 const appRoutes: Routes = [
@@ -64,14 +66,16 @@ const appRoutes: Routes = [
       AccountSettingsComponent,
       LoadingComponent,
       PageNotFoundComponent,
-      ErrorComponent
+      ErrorComponent,
+      SuccessComponent
    ],
    imports: [
       BrowserModule,
       RouterModule.forRoot(appRoutes),     //registering the routes (declared in appRoutes) in RouterModule
       HttpClientModule,
       FormsModule,
-      AngularFireModule.initializeApp(environment.firebase)
+      AngularFireModule.initializeApp(environment.firebase),
+      BrowserAnimationsModule
    ],
    providers: [
       DbService,

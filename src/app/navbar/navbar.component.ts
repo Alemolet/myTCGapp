@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit {
 
   private isLoggedInSub = new Subscription();
   private userData: User;
+  private userDataSub = new Subscription();
   private isLoggedIn: boolean = false;
 
   constructor(  private authService: AuthenticationService, 
@@ -24,7 +25,7 @@ export class NavbarComponent implements OnInit {
     this.isLoggedInSub = this.dbService.loggedIn.subscribe(res => {
       this.isLoggedIn = res;
       //@ts-ignore
-      this.authService.userInfoInit().subscribe(user => this.userData = { ...user });
+     this.userDataSub = this.authService.userInfoInit().subscribe(user => this.userData = { ...user });
     });
   }
 
@@ -39,5 +40,6 @@ export class NavbarComponent implements OnInit {
 
   ngOnDestroy(){
     this.isLoggedInSub.unsubscribe();
+    this.userDataSub.unsubscribe();
   }
 }

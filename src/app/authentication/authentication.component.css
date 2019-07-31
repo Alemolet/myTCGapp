@@ -9,6 +9,10 @@
     }
 }
 
+input.ng-touched.ng-invalid {
+    border: 1px groove rgba(253, 18, 18, 0.849);
+  }
+
 h1{
     text-align: center;
     margin-top: 30px;
@@ -36,11 +40,11 @@ p{
 }
 
 #footer{
-    margin-top: 65px;
+    margin-top: 55px;
 }
 
 #buttons{
-    margin-top: 70px;
+    margin-top: 60px;
 }
 
 .form-group{

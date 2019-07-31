@@ -13,7 +13,8 @@ export class DbService{
     
     cardRemoved = new EventEmitter<{flag: boolean, id: number}>();
     loggedIn = new BehaviorSubject<boolean>(false);
-    nicknameChange$ = new Subject();
+    nicknameChange$ = new Subject<string>();
+    successMsg$ = new EventEmitter<string>();
 
     private dbUrl: string = 'https://mytcgapp.firebaseio.com/';
     private API_KEY: string = 'AIzaSyBSu_yoiOQ2kkxh7gSCJG1O3uAOvr3jjcQ';
@@ -81,6 +82,14 @@ export class DbService{
         })
     }
 
+    putUser(email: string, password: string, nickname: string){
+        return this.http.put(this.dbUrl + 'accounts/' + this.userID + '.json', {
+            email: email,
+            password: password,
+            nickname: nickname
+        })
+    }
+
     getAllUsers(){
         return this.http.get(this.dbUrl + 'accounts.json');
     }
@@ -105,7 +114,7 @@ export class DbService{
             
             users.filter(user => user.email === email);
 
-            return users[0].nickname;
+            return users[0].nickname; //actually, if a email-match is found, the users array will always contain just one element
         }));
     }
 
@@ -117,7 +126,7 @@ export class DbService{
                 updatedNickname: string
             }){
 
-        /*1: find the user to update in the Db;*/
+        /*1: find the user to update in the Db; this HTTP request is needed to get the current-logged in account's idToken*/
 
         this.http
         .post("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + this.API_KEY, {
@@ -125,15 +134,31 @@ export class DbService{
             password: user.password,
             returnSecureToken: true
         })
+
         /*Check if updatedEmail/Password/Nickname are not empty => send a proper http POST/PUT
          request*/ 
+
         .subscribe(res => {
             if(user.updatedEmail){
                 this.updateEmail(res, user.updatedEmail);
+
+                let nickname: string = '';
+
+                this.getNickname(user.email).subscribe(result =>{
+                    nickname = result;
+                    this.putUser(user.updatedEmail, user.password, nickname).subscribe();
+                });            
             }
 
             if(user.updatedPassword){
                 this.updatePassword(res, user.updatedPassword);
+
+                let nickname: string = '';
+
+                this.getNickname(user.email).subscribe(result =>{
+                    nickname = result;
+                    this.putUser(user.email, user.updatedPassword, nickname).subscribe();
+                });
             }
 
             if(user.updatedNickname){
@@ -149,10 +174,7 @@ export class DbService{
             email: newEmail,
             returnSecureToken: false
         }).subscribe(res => {
-            alert("Your e-mail address has been succesfully changed. Log in again to see the changes!");
-            this.af.auth.signOut(); //is this actually doing something?
-            this.loggedIn.next(false);
-            this.router.navigate(['/authentication']);
+            this.successMsg$.emit("Your e-mail address has been succesfully changed. Log in again to see the changes!");
         });
     }
 
@@ -163,19 +185,13 @@ export class DbService{
             password: newPassword,
             returnSecureToken: false     
         }).subscribe(res => {
-            alert("Your password has been succesfully changed. You need to log in again to confirm the changes.");
-            this.af.auth.signOut(); //is this actually doing something?
-            this.loggedIn.next(false);
-            this.router.navigate(['/authentication']);
+            this.successMsg$.emit("Your password has been succesfully changed. You need to log in again to confirm the changes.");
         });
     }
 
     updateNickname(email: string, password: string, newNick: string){
-        this.http.put(this.dbUrl + 'accounts/' + this.userID + '.json', {
-            email: email,
-            password: password,
-            nickname: newNick
-        }).subscribe(res => {
+        this.putUser(email, password, newNick).subscribe(res => {
+            this.successMsg$.next("Your nickname has been correctly updated. Amazing!");
             this.nicknameChange$.next(newNick);
         }, err => console.log(err)) 
     }

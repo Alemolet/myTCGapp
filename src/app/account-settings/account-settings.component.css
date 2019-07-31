@@ -5,3 +5,12 @@
     font-size: 12px;
     text-align: center;
 }
+
+img {
+    max-width: 20%;
+    max-height: 20%;
+    display : block;
+    margin : auto;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}

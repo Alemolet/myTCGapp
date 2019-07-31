@@ -85,7 +85,7 @@ export class AuthenticationComponent implements OnInit {
         clearInterval(intervalId);
       } 
       /*Handling the case in which no user has been found in db and setInterval needs to be stopped*/
-      if(this.timer>5){
+      if(this.timer>5 && !this.userFound){
         this.timer = 0;
         clearInterval(intervalId);
       }

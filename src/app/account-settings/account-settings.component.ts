@@ -2,7 +2,6 @@ import { Component, OnInit, Input, OnDestroy, AfterViewInit, OnChanges } from '@
 import { NgForm } from '@angular/forms';
 import { DbService } from '../services/db.service';
 import { AuthenticationService } from '../services/authentication.service';
-import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-account-settings',
@@ -17,15 +16,16 @@ export class AccountSettingsComponent implements OnInit, OnDestroy, OnChanges {
     _nickname: string
   };
 
+  private profilePicSource: string = "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png";
   private editEmail: boolean = false;
   private editPassw: boolean = false;
   private editNick: boolean = false;
   private email: string = '';
   private password: string = '';
   private nickname: string = '';
+  private msg: string = '';
 
-  constructor(private dbService: DbService, private authService: AuthenticationService) {
-    
+  constructor(private dbService: DbService, private authService: AuthenticationService) {  
   }
 
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
@@ -61,7 +61,7 @@ export class AccountSettingsComponent implements OnInit, OnDestroy, OnChanges {
                                 updatedEmail: form.value.email, 
                                 updatedPassword: form.value.password, 
                                 updatedNickname: form.value.nickname});
-            
+    
     this.closeEdit();
     form.reset();
   }
