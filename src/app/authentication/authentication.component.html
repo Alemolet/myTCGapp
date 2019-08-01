@@ -27,19 +27,19 @@
                         </div>
                         <div class="form-group">
                             <label for="password">Password:</label>
-                            <input type="password" 
-                            id="password"
-                            placeholder="Password" 
-                            class="form-control" 
-                            ngModel 
-                            name="password"
-                            [value]="password" 
-                            required
-                            password
-                            minlength="8">
-                            <small id="passwordHelpBlock" class="form-text text-muted" style="text-align: left; margin-left: 12%;">
-                                8 characters min.
-                            </small>
+                                <input type="password" 
+                                id="password"
+                                placeholder="Password" 
+                                class="form-control" 
+                                ngModel 
+                                name="password"
+                                [value]="password" 
+                                required
+                                password
+                                minlength="8">
+                                <small id="passwordHelpBlock" class="form-text text-muted" style="text-align: center;">
+                                    8 characters min.
+                                </small>
                         </div>
                         <div id="buttons">
                             <button *ngIf="isRegistered" 

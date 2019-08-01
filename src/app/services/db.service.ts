@@ -174,7 +174,7 @@ export class DbService{
             email: newEmail,
             returnSecureToken: false
         }).subscribe(res => {
-            this.successMsg$.emit("Your e-mail address has been succesfully changed. Log in again to see the changes!");
+            this.successMsg$.emit("EMAIL_CHANGED");
         });
     }
 
@@ -185,13 +185,13 @@ export class DbService{
             password: newPassword,
             returnSecureToken: false     
         }).subscribe(res => {
-            this.successMsg$.emit("Your password has been succesfully changed. You need to log in again to confirm the changes.");
+            this.successMsg$.emit("PASSW_CHANGED");
         });
     }
 
     updateNickname(email: string, password: string, newNick: string){
         this.putUser(email, password, newNick).subscribe(res => {
-            this.successMsg$.next("Your nickname has been correctly updated. Amazing!");
+            this.successMsg$.next("NICK_CHANGED");
             this.nicknameChange$.next(newNick);
         }, err => console.log(err)) 
     }

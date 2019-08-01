@@ -1,12 +1,21 @@
+@media screen and (max-width:325px){
+  .alert{
+    top: 20% !important;
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+    width: 85% !important;
+  }
+}
+
 .alert {
     position: absolute;
     display: inline-block;
     opacity: 0.9;
-    top: 10%;
+    top: 20%;
     margin-right: 30vw;
-    margin-left: 30vw;
+    margin-left: 24vw;
     border: 1px solid transparent;
     border-radius: 4px;
-    padding-right: 12px;
+    width: 400px;
   }
   
