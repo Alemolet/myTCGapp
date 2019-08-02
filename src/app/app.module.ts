@@ -40,10 +40,12 @@ const appRoutes: Routes = [
       path: 'home', 
       component: GameScreenComponent, 
       canActivate: [AuthGuardService],
+      data: {animation: 'HomePage'},
       children: [
       { 
          path: 'collection', component: CollectionComponent, 
-         canActivate: [AuthGuardService] 
+         canActivate: [AuthGuardService],
+         data: {animation: 'CollectionPage'}
       }
    ]
    },

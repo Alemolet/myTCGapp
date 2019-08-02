@@ -112,8 +112,8 @@ export class DbService{
                 users.push({...res[key]});
             }
             
-            users.filter(user => user.email === email);
-
+            users = users.filter(user => user.email === email);
+            
             return users[0].nickname; //actually, if a email-match is found, the users array will always contain just one element
         }));
     }

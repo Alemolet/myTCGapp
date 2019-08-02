@@ -2,8 +2,8 @@
 <h1 *ngIf="!isLoading">Welcome to MyTCGApp!</h1>
 <div *ngIf="isLoading">
     <app-loading></app-loading>
-    <p *ngIf="timer < 2" style="text-align: center;">Logging in...</p>
-    <p *ngIf="timer >= 2"style="text-align: center;">Loading...</p>
+    <p *ngIf="timer < 3" style="text-align: center;">Logging in {{ dots }}</p>
+    <p *ngIf="timer >= 3"style="text-align: center;">Loading {{ dots }}</p>
 </div>
 
 <div *ngIf="!isLoading" class="row">
@@ -70,6 +70,8 @@
     </div>
     <div class="col-xs-2 col-md-4"></div>   
 </div>
+
+<div><app-success *ngIf="success" [msg] = "success"></app-success></div>
 
 <div><app-error *ngIf="error" [error] = "error"></app-error></div>
 </div>

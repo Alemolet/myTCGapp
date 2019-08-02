@@ -17,9 +17,12 @@ updateUserSuccessHandler(successCode: string){
                             break;
     case 'NICK_CHANGED': successMessage = "Your nickname has been correctly updated. Amazing!"
                             break;
-    default: successMessage = "Yay!"
   }
 
   return successMessage;
+  }
+
+  signUpSuccessHandler(){
+    return "Welcome! We've been waiting for you for such a long time! Hurry up and sign in!";
   }
 }

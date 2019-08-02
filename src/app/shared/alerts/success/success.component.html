@@ -1,8 +1,8 @@
-<div @fadeInAndOut *ngIf="msg" class="alert alert-success alert-dismissible fade show" role="alert">
+<div @fadeInAndOut *ngIf="msg.body" class="alert alert-success alert-dismissible fade show" role="alert">
   <div id="header">
     <h4 class="alert-heading">Hurray!</h4>  
   </div>
   <br>
-  <p>{{msg}}</p>
+  <p>{{ msg.body }}</p>
   <button type="button" class="btn btn-success" data-dismiss="alert" (click)="onClose()" style="float: right">Gotcha!</button>
 </div>

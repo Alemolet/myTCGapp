@@ -20,7 +20,7 @@ import { trigger, style, animate, transition } from '@angular/animations';
 ]
 })
 export class SuccessComponent implements OnInit {
-  @Input() msg: string;
+  @Input() msg: { status: string, body: string };
 
   private successCodes: string[] = ["EMAIL_CHANGED", "PASSW_CHANGED", "NICK_CHANGED"];
   
@@ -31,18 +31,18 @@ export class SuccessComponent implements OnInit {
     
     /*Visualize the alert for max 3 secs if the user doesn't press the button closing it themselves*/
     setTimeout(()=>{
-      if(this.msg != this.successCodes[0] && this.successCodes[1])
-        this.msg = null;
+      if(this.msg.status != this.successCodes[0] && this.successCodes[1])
+        this.msg.body = '';
     },3000);
   }
 
   onClose(){
       this.dbService.successMsg$.emit('');
        /* Forced logout and a new log in is requested after email or password update*/
-      if(this.msg != this.successCodes[2]){ //Gotta make a new control asap, just testing purposes
+      if(this.msg.status != this.successCodes[2]){ //Gotta make a new control asap, just testing purposes
         this.dbService.loggedIn.next(false);
         this.router.navigate(['/authentication']);
-        this.msg = null;
+        this.msg.body = '';
       }
   }
 }

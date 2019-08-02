@@ -40,11 +40,13 @@ export class AuthenticationService{
           index = i;
         }
       }
-      return email.slice(0, index);   //truncating the email at the @ character; user can later edit it.
+      return email.slice(0, index);   //truncating the email at the @ character; user can later edit them nickname.
     }
 
     userInfoInit(): Observable<User>{
-      let index: string;
+      let counter: number = 0;
+      let index: number = 0;
+      let tempUserObj: any[] = []
       let user: User;
 
       return this.dbService.getAllUsers().pipe(map(res => {
@@ -52,10 +54,10 @@ export class AuthenticationService{
 
         for(let key in res){
             users.push({...res[key]});
+            this.cuEmail === res[key].email ? index = counter : counter++;
         }
         
-        users.filter(user => user.email === this.cuEmail);
-        user = new User(users[0].email, users[0].password, users[0].nickname);
+        user = new User(users[index].email, users[index].password, users[index].nickname);
 
         return user;
       }));

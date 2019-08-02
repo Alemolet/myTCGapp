@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
-import { Subscription } from 'rxjs';
+import { Subscription, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { DbService } from '../services/db.service';
 import { NgForm } from '@angular/forms';
 import { UtilitiesService } from '../services/utilities.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { ErrorHandlerService } from '../services/error-handler.service';
+import { SuccessHandlerService } from '../services/success-handler.service';
 
 @Component({
   selector: 'app-authentication',
@@ -24,20 +25,34 @@ export class AuthenticationComponent implements OnInit {
   private userFound = false;
   private timer: number = 0;
   private error: string = '';
+  private success: {status: string, body: string};
+  private dots: string = '';
+  private dotTimer: number = 1;
+  private dot$ = new BehaviorSubject<string>('.');
 
   constructor( private authService: AuthenticationService, 
                private dbService: DbService, private utilsService: UtilitiesService, 
                private router: Router, private afAuth: AngularFireAuth, 
-               private errorHandler: ErrorHandlerService) { }
+               private errorHandler: ErrorHandlerService,
+               private successHandler: SuccessHandlerService) { }
 
   ngOnInit() {
    this.isLoadingSub = this.authService.loaded.subscribe(res => this.isLoading = !res);
+   this.dot$.subscribe(res => this.dots = res)
   }
 
   onLogIn(form: NgForm){
     this.email = form.value.email;
     this.password = form.value.password;
     this.isLoading = true;
+
+    /* Loading dots animation */
+    let intervalId = setInterval(() => {
+      this.dots === '...' ? this.dotTimer = 1 : this.dotTimer++;
+      this.timer === 3 ? this.dotTimer = 1 : null;
+      this.dot$.next('.'.repeat(this.dotTimer));
+      this.userFound ? clearInterval(intervalId) : null;
+    },850);
 
     this.loadHomePage();
 
@@ -60,7 +75,9 @@ export class AuthenticationComponent implements OnInit {
 
   onSignUp(form: NgForm){
     this.authService.signUp(form.value.email, form.value.password)
-    .subscribe(res => {},
+    .subscribe(res => {
+      this.success = { status: null, body: this.successHandler.signUpSuccessHandler() };
+    },
     err => {
       console.log(err);
       alert(err.message);
@@ -90,8 +107,8 @@ export class AuthenticationComponent implements OnInit {
         clearInterval(intervalId);
       }
     }, 1000);
-  }
-
+  } 
+  
   ngOnDestroy(){
     this.isLoadingSub.unsubscribe();
     this.logInSub.unsubscribe();

@@ -4,13 +4,44 @@
     width: 50px;
     font-size: 12px;
     text-align: center;
+    float: right;
 }
 
-img {
-    max-width: 20%;
-    max-height: 20%;
-    display : block;
-    margin : auto;
-    margin-bottom: 30px;
-    margin-top: 30px;
+.pic {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+label{
+    margin-right: 10px;
+}
+
+.profile-pic {
+	position: relative;
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+    max-width: 30%;
+}
+
+.top-body{
+    text-align: center;
+}
+
+.profile-pic:hover .edit {
+    display: block;
+    
+}
+
+.edit {
+	padding-top: 3px;	
+	padding-right: 3px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	display: none;
+}
+
+.edit a {
+	color: #000;
 }
