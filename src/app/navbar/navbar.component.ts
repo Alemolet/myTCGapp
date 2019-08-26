@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { DbService } from '../services/db.service';
 import { Router } from '@angular/router';
 import { User } from '../models/user.model';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-navbar',
@@ -19,6 +20,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(  private authService: AuthenticationService, 
                 private dbService: DbService, 
+                private storageService: StorageService,
                 private router: Router){}
 
   ngOnInit() {
@@ -32,6 +34,7 @@ export class NavbarComponent implements OnInit {
   onLogOut(){
     this.authService.loaded.emit(false);
     this.authService.logOut();
+    this.storageService.clearStorage();
     setTimeout(() => {
       this.authService.loaded.emit(true);
       this.router.navigate(['/authentication']);

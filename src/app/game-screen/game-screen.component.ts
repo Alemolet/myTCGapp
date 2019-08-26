@@ -21,7 +21,7 @@ export class GameScreenComponent implements OnInit {
   private isLoading: boolean = false;
   private isLoadingSub = new Subscription();
   private msg: { status: string, body: string };
-  private user: string = '';
+  private username: string = '';
 
   constructor(  private utilsService: UtilitiesService, 
                 private authService: AuthenticationService, 
@@ -34,8 +34,8 @@ export class GameScreenComponent implements OnInit {
     this.dbService.successMsg$.subscribe(successCode => {
       this.msg = {status: successCode, body: this.succService.updateUserSuccessHandler(successCode)};
     });
-    this.dbService.getNickname(this.authService.cuEmail).subscribe(res => this.user = res);
-    this.dbService.nicknameChange$.subscribe(res => this.user = res);
+    this.dbService.getNickname(this.authService.cuEmail).subscribe(res => this.username = res);
+    this.dbService.nicknameChange$.subscribe(res => this.username = res);
   }
 
   prepareRoute(outlet: RouterOutlet) {

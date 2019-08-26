@@ -8,6 +8,7 @@ import { UtilitiesService } from '../services/utilities.service';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { ErrorHandlerService } from '../services/error-handler.service';
 import { SuccessHandlerService } from '../services/success-handler.service';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-authentication',
@@ -34,11 +35,12 @@ export class AuthenticationComponent implements OnInit {
                private dbService: DbService, private utilsService: UtilitiesService, 
                private router: Router, private afAuth: AngularFireAuth, 
                private errorHandler: ErrorHandlerService,
-               private successHandler: SuccessHandlerService) { }
+               private successHandler: SuccessHandlerService,
+               private storageService: StorageService) { }
 
   ngOnInit() {
    this.isLoadingSub = this.authService.loaded.subscribe(res => this.isLoading = !res);
-   this.dot$.subscribe(res => this.dots = res)
+   this.dot$.subscribe(res => this.dots = res);
   }
 
   onLogIn(form: NgForm){
@@ -63,6 +65,7 @@ export class AuthenticationComponent implements OnInit {
           this.dbService.loggedIn.next(true);
           setTimeout(()=>{
             this.userFound = true;
+            this.storageService.populateStorage(this.email, this.password);
           }
           ,5000)       
         }, err => {
