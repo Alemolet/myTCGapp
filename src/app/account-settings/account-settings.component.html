@@ -1,4 +1,4 @@
-<div class="modal-content">
+<div class="modal-content" *ngIf="!editPic">
   <div class="modal-header">
     <h5 class="modal-title">Account Settings</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -9,7 +9,7 @@
   <div class="top-body container">
     <div class="profile-pic">
       <img class="pic image-responsive" src="{{ profilePicSource }}">
-      <div class="edit"><a href="#"><img class="edit-icon" src="http://i.stack.imgur.com/XMojX.png"></a></div>
+      <div class="edit" (click)="onPicEdit()"><span class="clickableIcon"><img class="edit-icon" src="http://i.stack.imgur.com/XMojX.png"></span></div>
     </div>
   </div>
   <hr>
@@ -50,10 +50,35 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled] = "!settingsForm.valid" (click)="onSaveChanges(settingsForm)">Save changes</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled] = "!settingsForm.valid || !settingsForm.dirty" (click)="onSaveChanges(settingsForm)">Save changes</button>
     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onClose(settingsForm)">Close</button>
   </div>
 </div>
+
+<div class="modal-content" *ngIf="editPic">
+  <div class="modal-header">
+    <h5 class="modal-title">Gallery</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+<div class="modal-body">
+  <div class="top-body container">
+      <div class="profile-pic">
+          <img class="pic image-responsive" src="{{ previewPicSource }}">Preview</div>
+  </div>
+  <hr>
+  <div style="text-align: center;">
+  <span class="clickableIcon"><img src="data:image/png;base64,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" style="width: 75px; height: 75px; border: 1px solid grey;"></span>
+  <span class="clickableIcon"><img (click)="onPicSelection(i)" *ngFor="let photo of profilePics; let i = index" style="width: 75px; height: 75px; border: 1px solid grey; margin: 5px;" src="{{ photo }}"></span>
+  </div>
+</div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled] = "!(picChanged | async)" (click)="onSavePic()">Save</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onBack()">Back</button>
+  </div>
+</div>
+
 
 
         

@@ -42,6 +42,18 @@ label{
 	display: none;
 }
 
-.edit a {
-	color: #000;
+.clickableIcon {
+    cursor: pointer;
+}
+
+.clickablePic {
+    cursor: pointer;
+}
+
+.clickablePic:focus {
+    border: 1px solid blue;
+}
+
+.clickablePic:hover {
+    border: 1px solid blue;
 }
